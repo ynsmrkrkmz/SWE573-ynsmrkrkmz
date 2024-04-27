@@ -1,0 +1,9 @@
+{
+  "name": "@infoshare/i18n",
+  "private": true,
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "sync": "ts-node --transpile-only src/commands/syncAndSortFields.ts"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@infoshare/utils",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "zxcvbn": "4.4.2",
+    "@types/zxcvbn": "4.4.1"
+  }
+}

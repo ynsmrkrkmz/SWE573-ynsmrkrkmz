@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "build",
+    "composite": true,
+    "paths": {
+      "@infoshare/i18n": ["../../i18n/src/*"]
+    }
+  },
+  "include": ["src/**/*", "src/**/*.json"]
+}

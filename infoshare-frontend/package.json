@@ -1,0 +1,67 @@
+{
+  "name": "@infoshare/root",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "./packages/*"
+  ],
+  "scripts": {
+    "web": "npm -w @infoshare/web",
+    "i18n": "npm -w @infoshare/i18n",
+    "utils": "npm -w @infoshare/utils",
+    "generators": "npm -w @infoshare/generators",
+    "start": "npm run start -w @infoshare/web",
+    "build": "npm run build -w @infoshare/web",
+    "test": "npm run test -w @infoshare/web",
+    "sync:i18n": "npm run sync -w @infoshare/i18n",
+    "generate": "npm generators @infoshare/start",
+    "lint": "eslint packages -c ./.eslintrc.js --ext js,jsx,ts,tsx --fix --max-warnings=0",
+    "prettier": "prettier --write \"packages/**/*.{js,jsx,ts,tsx,json,md}\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@craco/craco": "^7.0.0-alpha.7",
+    "@emotion/eslint-plugin": "11.10.0",
+    "@typescript-eslint/eslint-plugin": "5.36.2",
+    "emotion": "11.0.0",
+    "eslint": "8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "22.0.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-n": "15.2.5",
+    "eslint-plugin-promise": "6.0.1",
+    "eslint-plugin-react": "7.31.7",
+    "typescript": "4.8.2"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "3.3.0",
+    "husky": "8.0.1",
+    "lint-staged": "13.0.3",
+    "prettier": "2.7.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{js,jsx,ts,tsx,json}": [
+        "npm run prettier",
+        "npm run lint",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "*.json"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
