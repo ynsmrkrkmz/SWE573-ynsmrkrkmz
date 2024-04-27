@@ -5,7 +5,6 @@ import com.swe573.infoshare.model.User;
 import com.swe573.infoshare.repository.UserRepository;
 import com.swe573.infoshare.request.auth.AuthenticationRequest;
 import com.swe573.infoshare.request.auth.RegisterRequest;
-import com.swe573.infoshare.response.AuthenticationResponse;
 import com.swe573.infoshare.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +21,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public boolean register(RegisterRequest request) {
         var role = request.getRole() == 1 ? Role.USER : Role.ADMIN;
         var user = User.builder()
                 .name(request.getName())
@@ -34,18 +33,16 @@ public class AuthService {
         if(userRepository.findByEmail(request.getEmail()).isEmpty()){
             userRepository.save(user);
         }
-        var jwtToken = jwtService.generateToken(user);
 
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return true;
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public String authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()));
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return jwtService.generateToken(user);
     }
 
 }
