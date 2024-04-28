@@ -1,4 +1,5 @@
 package com.swe573.infoshare.model;
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -13,18 +14,22 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "users")
-public class User implements UserDetails{
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private  String name;
-    private  String lastname;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String lastname;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String password;
-
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private  Role role;
-
+    @Column(name = "role", columnDefinition = "user_role", nullable = false)
+    private Role role = Role.USER;
 
     public User() {
 
