@@ -43,4 +43,8 @@ public class CommunityService {
 
         return true;
     }
+
+    public Community getCommunityDetailsById(Long communityId) {
+        return communityRepository.getReferenceById(communityId);
+    }
 }

@@ -1,5 +1,7 @@
 package com.swe573.infoshare.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -15,14 +17,16 @@ public class CommunityUser {
     @EmbeddedId
     private CommunityUserId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("user_id")
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonBackReference
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("community_id")
     @JoinColumn(name = "community_id", insertable = false, updatable = false)
+    @JsonBackReference
     private Community community;
 
     @Builder.Default
