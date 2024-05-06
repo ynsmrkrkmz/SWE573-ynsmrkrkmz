@@ -1,6 +1,7 @@
 package com.swe573.infoshare.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,7 @@ public class CommunityService {
         CommunityUser communityUser = CommunityUser
                 .builder()
                 .id(communityUserId)
+                .createdBy(authUser)
                 .userCommunityRole(UserCommunityRole.OWNER)
                 .build();
 
@@ -57,11 +59,11 @@ public class CommunityService {
     }
 
     public List<CommunityUser> getUserCommunities(User authUser) {
-        return communityUserRepository.findAllByUser(authUser);
+        return communityUserRepository.findAllByUserAndDeleted(authUser, false);
     }
 
     public List<Community> getAllCommunities() {
-        return communityRepository.findAll();
+        return communityRepository.findByDeleted(false);
     }
 
     public boolean joinCommunity(User user, Long communityId) {
@@ -86,17 +88,21 @@ public class CommunityService {
 
     public boolean inviteUser(User authUser, InviteUserRequest request) {
 
+        Optional<User> invitedUser = userRepository.findByEmail(request.getEmail());
+
+        if (invitedUser.isEmpty())
+            return false;
+
         CommunityUserId communityUserId = new CommunityUserId(request.getCommunityId(), authUser.getId());
         CommunityUser communityUser = communityUserRepository.getReferenceById(communityUserId);
 
         if (communityUser.getUserCommunityRole() == UserCommunityRole.MEMBER)
             return false;
 
-        User invitedUser = userRepository.getReferenceById(request.getUserId());
         Community community = communityRepository.getReferenceById(request.getCommunityId());
         CommunityInvitation communityInvitation = CommunityInvitation
                 .builder()
-                .user(invitedUser)
+                .user(invitedUser.get())
                 .community(community)
                 .createdBy(authUser)
                 .userCommunityRole(request.getUserCommunityRole())

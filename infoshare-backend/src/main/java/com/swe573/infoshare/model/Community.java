@@ -3,6 +3,8 @@ package com.swe573.infoshare.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -41,5 +43,6 @@ public class Community extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "community", targetEntity = CommunityUser.class, cascade = CascadeType.ALL)
     @JsonManagedReference
+    @Where(clause = "deleted = false")
     private List<CommunityUser> users = new ArrayList<>();
 }

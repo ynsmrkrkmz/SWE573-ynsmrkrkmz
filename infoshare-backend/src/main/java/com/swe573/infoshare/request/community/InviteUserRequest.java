@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InviteUserRequest {
     private Long communityId;
-    private Long userId;
+    private String email;
     private UserCommunityRole userCommunityRole;
 }

@@ -11,5 +11,5 @@ import java.util.List;
 
 @Repository
 public interface CommunityUserRepository extends JpaRepository<CommunityUser, CommunityUserId> {
-    List<CommunityUser> findAllByUser(User user);
+    List<CommunityUser> findAllByUserAndDeleted(User user, boolean deleted);
 }
