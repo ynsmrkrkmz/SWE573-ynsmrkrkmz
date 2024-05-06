@@ -1,10 +1,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Apitypes, LoginFormInput, SignupFormInput } from 'types';
+import { Apitypes } from 'types';
 import api from './api';
+import { LoginFormInput, SignupFormInput, User } from 'types/userTypes';
 
 const baseUrl = 'v1';
-
-export const useGetUser = (options?: {}) => useQuery([`${baseUrl}/token`], options);
 
 export const useLogin = () =>
   useMutation(async (data: LoginFormInput) => {
@@ -25,3 +24,31 @@ export const useSignup = () =>
       useAuthorizationHeader: false,
     });
   });
+
+export const useGetUser = (enabled = true) =>
+  useQuery(
+    ['user.me'],
+    async () => {
+      return api.fetch<User>({
+        url: `${baseUrl}/users/me`,
+      });
+    },
+    {
+      enabled,
+    }
+  );
+
+export const useGetUserById = (userId: string | undefined, enabled = true) =>
+  useQuery(
+    [`user-${userId}`, userId],
+    async () => {
+      if (!userId) return;
+
+      return api.fetch<User>({
+        url: `${baseUrl}/users/${userId}`,
+      });
+    },
+    {
+      enabled,
+    }
+  );

@@ -1,34 +1,25 @@
+import { Grid, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
 import Header from 'components/Header';
-import { useAppContext } from 'contexts/AppContext';
-import React from 'react';
+import LeftMenu from 'components/LeftMenu';
 import { Outlet } from 'react-router-dom';
-import Breadcrumbs from './Breadcrumbs';
 
 const DefaultLayout = () => {
-  const { pageName } = useAppContext();
-
   return (
-    <Box sx={{ display: 'flex', pt: 5, pl: 2 }}>
+    <Box sx={{ display: 'block', pt: '65px', overflow: 'hidden' }}>
       <Header />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, px: 3 }}>
         <Divider />
-        <Typography variant={'h1'} color="primary" sx={{ flexGrow: 1, mt: 2 }}>
-          {pageName || (
-            <Box sx={{ height: 29, display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
-              <CircularProgress size={20} />
-            </Box>
-          )}
-        </Typography>
-        <Box sx={{ my: 2 }}>
-          <Breadcrumbs />
-        </Box>
-        <Box>
-          <Outlet />
-        </Box>
+        <Stack direction={'row'} height={'100%'}>
+          <Box sx={{ width: '256px' }}>
+            <LeftMenu />
+          </Box>
+          <Divider orientation="vertical" flexItem />
+          <Box sx={{ flexGrow: 1, overflow: 'overlay' }}>
+            <Outlet />
+          </Box>
+        </Stack>
       </Box>
     </Box>
   );

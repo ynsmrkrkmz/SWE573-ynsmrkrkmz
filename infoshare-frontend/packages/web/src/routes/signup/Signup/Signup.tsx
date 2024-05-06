@@ -22,7 +22,7 @@ import { useAuthContext } from 'contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import useFormResolver from 'hooks/useFormResolver';
 import { FieldValues, useForm } from 'react-hook-form';
-import { SignupFormInputSchema } from 'types';
+import { SignupFormInputSchema } from 'types/userTypes';
 import zxcvbn from 'zxcvbn';
 import useHandleError from 'hooks/useHandleError';
 import { useSignup } from 'services/userService';
@@ -53,7 +53,7 @@ const Signup: FC = () => {
   }, [isLoading, navigate, isSuccess]);
 
   const onSubmit = async ({ name, lastname, email, password, confirm }: FieldValues) => {
-    const { meta } = await signupMutate({ name, lastname, email, password, confirm });
+    const { meta } = await signupMutate({ name, lastname, email, password, confirm, role: 1 });
 
     if (isSuccess) showSuccess(meta?.message);
   };

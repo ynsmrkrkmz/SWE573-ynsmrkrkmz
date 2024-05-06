@@ -1,11 +1,10 @@
 import useHandleError from 'hooks/useHandleError';
 import React, { FC, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { User } from 'types/userTypes';
-import { getAuth, getUserFromToken, setToken } from 'utils/authentication';
+import { LoginFormInput, User } from 'types/userTypes';
+import { deleteToken, getAuth, getToken, getUserFromToken, setToken } from 'utils/authentication';
 import { useAppContext } from './AppContext';
-import { LoginFormInput } from 'types';
-import { useLogin } from 'services/userService';
+import { useGetUser, useLogin } from 'services/userService';
 
 type AuthContextProps = {
   user: User | undefined;
@@ -45,12 +44,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>();
   const [userClaims, setUserClaims] = useState<string[]>();
   const [isLoading, setIsLoading] = useState(true);
+  const [idToken, setIdToken] = useState<string | null>(null);
 
   const auth = useMemo(() => {
-    const _auth = getAuth();
+    const token = getAuth();
 
-    return _auth;
-  }, [language]);
+    return token;
+  }, [language, idToken]);
+
+  const { refetch: getUser } = useGetUser(false);
 
   useEffect(() => {
     if (!auth) {
@@ -58,15 +60,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       return;
     }
 
-    const subscribe = () => {
-      setUserClaims(auth.claims);
-      setUser(auth);
-      setIsSignedIn(true);
+    const subscribe = async () => {
+      const { data } = await getUser();
+      setUser(data?.data);
+      setIsSignedIn(!!data?.data);
       setIsLoading(false);
     };
 
-    return () => subscribe();
-  }, [auth]);
+    subscribe();
+  }, [auth, getUser]);
 
   const { mutateAsync: signInMutate } = useLogin();
 
@@ -85,22 +87,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           })
         );
       }
-
-      const user = getUserFromToken(data.token);
-
-      if (!user) {
-        handleError(new Error('Could not get "user".'));
-        throw new Error(
-          intl.formatMessage({
-            id: 'error.unexpectedError',
-          })
-        );
-      }
-
       setToken(data.token);
-      setUserClaims(user.claims);
-      setUser(user);
-      setIsSignedIn(true);
+      setIdToken(data.token);
     },
     [handleError, intl, signInMutate]
   );
@@ -111,6 +99,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     setIsSignedIn(false);
     setUserClaims(undefined);
     setIsLoading(false);
+    deleteToken();
   }, []);
 
   const contextValue = useMemo(() => {

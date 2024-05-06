@@ -29,35 +29,6 @@ export type ApiResponseBody<T> = { data?: T; meta?: ResponseMeta };
 
 export type ApiResponse<T> = Promise<ApiResponseBody<T>>;
 
-export const LoginFormInputSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'error.emailCantBeBlank' })
-    .email({ message: 'error.invalidEmail' }),
-  password: z.string().min(1, { message: 'error.passwordCantBeBlank' }),
-});
-
-export type LoginFormInput = z.infer<typeof LoginFormInputSchema>;
-
-export const SignupFormInputSchema = z
-  .object({
-    name: z.string().min(1, { message: 'error.nameCantBeBlank' }),
-    lastname: z.string().min(1, { message: 'error.lastnameCantBeBlank' }),
-    email: z
-      .string()
-      .min(1, { message: 'error.emailCantBeBlank' })
-      .email({ message: 'error.invalidEmail' }),
-    password: z.string().min(1, { message: 'error.passwordCantBeBlank' }),
-    confirm: z.string(),
-  })
-  .refine((data: { password: string; confirm: string }) => data.password === data.confirm, {
-    message: 'error.passwordsNotMatch',
-    path: ['confirm'], // path of error
-  })
-  .refine(...refinePasswordStrength);
-
-export type SignupFormInput = z.infer<typeof SignupFormInputSchema>;
-
 export const ResetPasswordFormInputSchema = z
   .object({
     password: z.string().min(1, { message: 'error.passwordCantBeBlank' }),
@@ -101,9 +72,20 @@ export enum FileType {
 }
 
 export type BaseEntity = {
-  recordState?: number;
-  updateTime?: string;
-  insertTime?: string;
-  insertUserId?: string;
-  updateUserId?: string;
+  createdBy: number;
+  createdAt: string;
+  updatedBy?: number;
+  updatedAt?: string;
+  deleted: boolean;
 };
+
+export enum Role {
+  ADMIN,
+  USER,
+}
+
+export enum UserCommunityRole {
+  OWNER,
+  MEMBER,
+  MODERATOR,
+}
