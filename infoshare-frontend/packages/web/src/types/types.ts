@@ -78,14 +78,3 @@ export type BaseEntity = {
   updatedAt?: string;
   deleted: boolean;
 };
-
-export enum Role {
-  ADMIN,
-  USER,
-}
-
-export enum UserCommunityRole {
-  OWNER,
-  MEMBER,
-  MODERATOR,
-}

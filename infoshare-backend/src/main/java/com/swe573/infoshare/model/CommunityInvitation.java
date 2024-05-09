@@ -1,6 +1,6 @@
 package com.swe573.infoshare.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.Where;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -15,21 +15,20 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "community_invitation")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Where(clause = "deleted = false")
 public class CommunityInvitation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @MapsId("user_id")
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @Where(clause = "deleted = false")
     private User user;
 
-    @ManyToOne
-    @MapsId("community_id")
-    @JoinColumn(name = "community_id", insertable = false, updatable = false)
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "community_id", nullable = false)
+    @Where(clause = "deleted = false")
     private Community community;
 
     @Builder.Default

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.swe573.infoshare.exceptions.InvitationAlreadyExistException;
 import com.swe573.infoshare.model.Community;
 import com.swe573.infoshare.model.CommunityInvitation;
 import com.swe573.infoshare.model.CommunityUser;
@@ -74,16 +75,31 @@ public class CommunityService {
             return false;
 
         CommunityUserId communityUserId = new CommunityUserId(communityId, user.getId());
-        CommunityUser communityUser = CommunityUser
-                .builder()
-                .id(communityUserId)
-                .createdBy(user)
-                .userCommunityRole(UserCommunityRole.MEMBER)
-                .build();
 
-        communityUserRepository.save(communityUser);
+        Optional<CommunityUser> existingCommunityUser = communityUserRepository.findById(communityUserId);
+
+        if (existingCommunityUser.isEmpty()) {
+            CommunityUser communityUser = CommunityUser
+                    .builder()
+                    .id(communityUserId)
+                    .createdBy(user)
+                    .userCommunityRole(UserCommunityRole.MEMBER)
+                    .build();
+
+            communityUserRepository.save(communityUser);
+
+            return true;
+        }
+
+        existingCommunityUser.get().setUserCommunityRole(UserCommunityRole.MEMBER);
+        existingCommunityUser.get().setDeleted(false);
+        existingCommunityUser.get().setUpdatedBy(user);
+        existingCommunityUser.get().setUpdatedAt(OffsetDateTime.now());
+
+        communityUserRepository.save(existingCommunityUser.get());
 
         return true;
+
     }
 
     public boolean inviteUser(User authUser, InviteUserRequest request) {
@@ -100,6 +116,13 @@ public class CommunityService {
             return false;
 
         Community community = communityRepository.getReferenceById(request.getCommunityId());
+
+        Optional<CommunityInvitation> existingInvitation = communityInvitationRepository
+                .findByCommunityAndUserAndInvitationStatus(community, invitedUser.get(), InvitationStatus.PENDING);
+
+        if (!existingInvitation.isEmpty())
+            throw new InvitationAlreadyExistException(request.getEmail());
+
         CommunityInvitation communityInvitation = CommunityInvitation
                 .builder()
                 .user(invitedUser.get())
@@ -149,6 +172,11 @@ public class CommunityService {
 
         CommunityUserId communityUserId = new CommunityUserId(communityId, authUser.getId());
         CommunityUser communityUser = communityUserRepository.getReferenceById(communityUserId);
+        List<CommunityUser> owners = communityUserRepository
+                .findAllByUserCommunityRole(UserCommunityRole.OWNER);
+
+        if (owners.size() == 1)
+            return false;
 
         if (!communityUser.getUser().getId().equals(authUser.getId()))
             return false;

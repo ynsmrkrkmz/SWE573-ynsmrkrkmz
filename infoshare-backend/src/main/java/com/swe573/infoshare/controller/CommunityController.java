@@ -96,19 +96,18 @@ public class CommunityController {
                 boolean joined = response.getUsers().stream()
                                 .anyMatch(c -> Objects.equals(c.getUser().getId(), authUser.getId()));
 
-                List<UserResponse> users = !response.isPrivate()
-                                || joined
-                                                ? response.getUsers().stream().map(u -> UserResponse.builder()
-                                                                .name(u.getUser().getName())
-                                                                .lastname(u.getUser().getLastname())
-                                                                .email(u.getUser().getEmail())
-                                                                .role(u.getUser().getRole())
-                                                                .id(u.getUser().getId())
-                                                                .userCommunityRole(u.getUserCommunityRole())
-                                                                .build()).toList()
-                                                : Collections.emptyList();
+                List<UserResponse> users = !response.isPrivate() || joined
+                                ? response.getUsers().stream().map(u -> UserResponse.builder()
+                                                .name(u.getUser().getName())
+                                                .lastname(u.getUser().getLastname())
+                                                .email(u.getUser().getEmail())
+                                                .id(u.getUser().getId())
+                                                .userCommunityRole(u.getUserCommunityRole())
+                                                .build()).toList()
+                                : Collections.emptyList();
 
-                CommunityDetailsResponse detailsResponse = CommunityDetailsResponse.builder().name(response.getName())
+                CommunityDetailsResponse detailsResponse = CommunityDetailsResponse.builder()
+                                .name(response.getName())
                                 .description(response.getDescription())
                                 .imageUrl(response.getImageUrl())
                                 .isPrivate(response.isPrivate())

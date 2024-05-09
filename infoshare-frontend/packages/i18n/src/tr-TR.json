@@ -38,5 +38,21 @@
   "generic.notifications": "Bildirimler",
   "community.about": "Hakkında",
   "community.leave": "Topluluktan ayrıl",
-  "community.join": "Topluluğa katıl"
+  "community.join": "Topluluğa katıl",
+  "success.leftCommunity": "Topluluktan başarıyla ayrıldın",
+  "success.joinedCommunity": "Topluluğa başarıyla katıldın",
+  "community.members": "Üyeler",
+  "community.settings": "Topluluk Ayarları",
+  "community.posts": "Gönderiler",
+  "community.owners": "Sahipler",
+  "community.moderators": "Moderatörler",
+  "community.assignRole": "Rol Ata",
+  "community.kickMember": "Kov",
+  "community.invitations": "Davetiyeler",
+  "community.newInvitation": "Yeni Davet",
+  "generic.cancel": "İptal Et",
+  "generic.ok": "Tamam",
+  "community.invite": "Davet Et",
+  "success.userInvited": "Kullanıcı başarıyla davet edildi",
+  "community.role": "Topluluk Rolü"
 }

@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.hibernate.annotations.Where;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,8 +39,12 @@ public class Community extends BaseEntity {
     private boolean isPrivate = true;
 
     @Builder.Default
-    @OneToMany(mappedBy = "community", targetEntity = CommunityUser.class, cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "community", targetEntity = CommunityUser.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @Where(clause = "deleted = false")
     private List<CommunityUser> users = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "community", targetEntity = CommunityInvitation.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Where(clause = "deleted = false")
+    private List<CommunityInvitation> invitations = new ArrayList<>();
 }

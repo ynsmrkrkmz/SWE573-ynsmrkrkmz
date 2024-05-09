@@ -85,7 +85,7 @@ const Header: FC = () => {
               <Avatar sx={{ width: '32px', height: '32px', mx: 1 }} src={randomPicture} />
 
               <Typography>
-                {user?.name} {user?.lastName}
+                {user?.name} {user?.lastname}
               </Typography>
               <IconButton
                 onClick={handleMenuOpen}

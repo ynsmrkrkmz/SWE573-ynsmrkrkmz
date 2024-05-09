@@ -12,35 +12,67 @@ import { useCommunityContext } from '../contexts/CommunityContext';
 import { useQueryClient } from '@tanstack/react-query';
 import useNotification from 'hooks/useNotification';
 import { LoadingButton } from '@mui/lab';
+import ContentLoading from 'components/ContentLoading';
+import { useAuthContext } from 'contexts/AuthContext';
+import { UserCommunityRole } from 'types/userTypes';
 
 const CommunityDetailsRoot: FC = () => {
   const intl = useIntl();
   const { communityId } = useParams();
   const queryClient = useQueryClient();
-  const { setDescription, setCommunityId } = useCommunityContext();
+  const {
+    authCommunityUser,
+    setDescription,
+    setCommunityId,
+    setAuthCommunityUser,
+    setCommunityUsers,
+  } = useCommunityContext();
+  const { user } = useAuthContext();
   const navigate = useNavigate();
   const { showSuccess } = useNotification();
 
-  const { data } = useGetCommunityDetailsById(communityId);
+  const { data, isLoading } = useGetCommunityDetailsById(communityId);
+
   const { mutateAsync: joinCommunityMutate, isLoading: joinIsLoading } = useJoinCommunity({
-    onSuccess: () => {
+    onSuccess: async () => {
       showSuccess(intl.formatMessage({ id: 'success.joinedCommunity' }));
-      navigate('.');
+      await queryClient.invalidateQueries({
+        queryKey: ['community-details', communityId],
+        exact: true,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['user-communities'],
+        exact: true,
+      });
     },
   });
 
   const { mutateAsync: leaveCommunityMutate, isLoading: leaveIsLoading } = useLeaveCommunity({
-    onSuccess: () => {
+    onSuccess: async () => {
       showSuccess(intl.formatMessage({ id: 'success.leftCommunity' }));
-      queryClient.invalidateQueries({ queryKey: [`community-details-${communityId}`] });
+      await queryClient.invalidateQueries({
+        queryKey: ['community-details', communityId],
+        exact: true,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['user-communities'],
+        exact: true,
+      });
     },
   });
 
   const communityData = data?.data;
 
   useEffect(() => {
-    communityData && setDescription(communityData.description);
-  }, [setDescription, communityData]);
+    if (communityData) {
+      setDescription(communityData.description);
+      setCommunityUsers(communityData.users);
+
+      let authCommunityUser = communityData.users?.find((u) => u.id === user?.id) ?? null;
+
+      setAuthCommunityUser(authCommunityUser);
+    }
+  }, [setDescription, data]);
 
   useEffect(() => {
     communityId && setCommunityId(communityId);
@@ -54,7 +86,44 @@ const CommunityDetailsRoot: FC = () => {
     await leaveCommunityMutate({ communityId: communityId });
   };
 
-  return (
+  const visible =
+    (authCommunityUser && authCommunityUser.userCommunityRole in UserCommunityRole) ?? false;
+
+  let communityMenuItems = [
+    {
+      label: 'community.about',
+      link: 'about',
+      visible: true,
+    },
+    {
+      label: 'community.posts',
+      link: 'posts',
+      visible: visible,
+    },
+    {
+      label: 'community.members',
+      link: 'members',
+      visible: visible,
+    },
+    {
+      label: 'community.invitations',
+      link: 'invitations',
+      visible:
+        (authCommunityUser && authCommunityUser.userCommunityRole !== UserCommunityRole.MEMBER) ??
+        false,
+    },
+    {
+      label: 'community.settings',
+      link: 'settings',
+      visible:
+        (authCommunityUser && authCommunityUser.userCommunityRole !== UserCommunityRole.MEMBER) ??
+        false,
+    },
+  ];
+
+  return isLoading ? (
+    <ContentLoading />
+  ) : (
     <Stack direction={'column'} spacing={2} padding={5}>
       <Card>
         <CardHeader
@@ -74,21 +143,30 @@ const CommunityDetailsRoot: FC = () => {
             { memberCount: communityData?.memberCount }
           )}
           action={
-            communityData && communityData.joined ? (
-              <LoadingButton loading={leaveIsLoading} onClick={handleLeave}>
+            communityData &&
+            (communityData.joined ? (
+              <LoadingButton variant="contained" loading={leaveIsLoading} onClick={handleLeave}>
                 <Typography>{intl.formatMessage({ id: 'community.leave' })}</Typography>
               </LoadingButton>
-            ) : (
+            ) : !communityData.private ? (
               <LoadingButton loading={joinIsLoading} onClick={handleJoin}>
                 <Typography>{intl.formatMessage({ id: 'community.join' })}</Typography>
               </LoadingButton>
-            )
+            ) : null)
           }
         />
-        <CardActions disableSpacing>
-          <Button onClick={() => navigate(`./about`)}>
-            <Typography>{intl.formatMessage({ id: 'community.about' })}</Typography>
-          </Button>
+        <CardActions>
+          {communityMenuItems.map((menuItem) =>
+            menuItem.visible ? (
+              <Button
+                variant="outlined"
+                sx={{ minWidth: 100 }}
+                onClick={() => navigate(`./${menuItem.link}`)}
+              >
+                <Typography>{intl.formatMessage({ id: `${menuItem.label}` })}</Typography>
+              </Button>
+            ) : null
+          )}
         </CardActions>
       </Card>
       <Outlet />

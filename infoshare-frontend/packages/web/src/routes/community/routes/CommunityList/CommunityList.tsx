@@ -1,24 +1,14 @@
 import { Grid, IconButton, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
-import { useAppContext } from 'contexts/AppContext';
-import { useNavigate } from 'react-router-dom';
-import useFormResolver from 'hooks/useFormResolver';
-import useNotification from 'hooks/useNotification';
 import Root from './CommunityList.style';
 import { MdInfo } from 'react-icons/md';
 import { useAllCommunities } from 'services/communityService';
-import { useQueryClient } from '@tanstack/react-query';
 import CommunityCard from 'routes/community/components/CommunityCard';
 import ContentLoading from 'components/ContentLoading';
 
 const Communitylist: FC = () => {
   const intl = useIntl();
-  const { language } = useAppContext();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const { showSuccess } = useNotification();
-  const formResolver = useFormResolver();
 
   const { data, isLoading } = useAllCommunities();
 

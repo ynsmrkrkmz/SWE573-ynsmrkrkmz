@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import Root from './LeftMenu.style';
 import CircularProgress from '@mui/material/CircularProgress';
 import {
@@ -32,6 +32,8 @@ const LeftMenu: FC = () => {
   const handleClick = () => {
     setOpen(!open);
   };
+
+  useEffect(() => {}, [data]);
 
   return (
     <Root>

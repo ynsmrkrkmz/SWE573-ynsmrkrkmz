@@ -1,11 +1,11 @@
 import refinePasswordStrength from '@infoshare/utils/refinePasswordStrength';
-import { BaseEntity, Role, UserCommunityRole } from 'types';
+import { BaseEntity } from 'types';
 import { z } from 'zod';
 
 export type User = BaseEntity & {
   id: number;
   name: string;
-  lastName: string;
+  lastname: string;
   email: string;
   role: Role;
   userCommunityRole: UserCommunityRole;
@@ -40,3 +40,14 @@ export const SignupFormInputSchema = z
   .refine(...refinePasswordStrength);
 
 export type SignupFormInput = z.infer<typeof SignupFormInputSchema>;
+
+export enum Role {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
+export enum UserCommunityRole {
+  OWNER = 'OWNER',
+  MODERATOR = 'MODERATOR',
+  MEMBER = 'MEMBER',
+}

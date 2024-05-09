@@ -1,5 +1,5 @@
 import { BaseEntity } from 'types';
-import { User } from '../../../types/userTypes';
+import { User, UserCommunityRole } from '../../../types/userTypes';
 import { z } from 'zod';
 
 export type Community = {
@@ -29,4 +29,20 @@ export type CreateCommunityFormInput = {
   description: string;
   imageUrl: string | null;
   isPrivate: boolean;
+};
+
+export const InviteNewUserFormInputSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: 'error.emailCantBeBlank' })
+    .email({ message: 'error.invalidEmail' }),
+  userCommunityRole: z.enum([
+    UserCommunityRole.OWNER,
+    UserCommunityRole.MODERATOR,
+    UserCommunityRole.MEMBER,
+  ]),
+});
+
+export type InviteNewUserFormInput = z.infer<typeof InviteNewUserFormInputSchema> & {
+  communityId: string | undefined;
 };
