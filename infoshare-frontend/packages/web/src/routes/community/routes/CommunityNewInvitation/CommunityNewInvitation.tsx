@@ -9,9 +9,9 @@ import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCommunityContext } from 'routes/community/contexts/CommunityContext';
 import { InviteNewUserFormInputSchema } from 'routes/community/types/communityTypes';
-import { useInviteUser } from 'services/communityService';
 import { UserCommunityRole } from 'types/userTypes';
 import Root from './CommunityNewInvitation.style';
+import { useInviteUser } from 'services/invitationService';
 
 const CommunityNewInvitation: FC = () => {
   const intl = useIntl();

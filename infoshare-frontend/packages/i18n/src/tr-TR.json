@@ -54,5 +54,19 @@
   "generic.ok": "Tamam",
   "community.invite": "Davet Et",
   "success.userInvited": "Kullanıcı başarıyla davet edildi",
-  "community.role": "Topluluk Rolü"
+  "community.role": "Topluluk Rolü",
+  "status.pending": "Beklemede",
+  "status.accepted": "Kabul Edildi",
+  "status.calcelled": "İptal Edildi",
+  "status.rejected": "Reddedildi",
+  "invitation.id": "Davet ID",
+  "invitation.invitedUserFullname": "Davet Edilen Adı",
+  "invitation.invitedUserEmail": "Davet Edilen Maili",
+  "invitation.invitedRole": "Rolü",
+  "invitation.invitorFullname": "Davet Eden Adı",
+  "invitation.sentAt": "Davet Zamanı",
+  "invitation.invitationStatus": "Davet Durumu",
+  "generic.areYouSure": "Emin misin?",
+  "success.invitationCancelled": "Davet başarıyla iptal edildi",
+  "invitation.cancelWarnContent": "Davtiye iptal edilecek"
 }

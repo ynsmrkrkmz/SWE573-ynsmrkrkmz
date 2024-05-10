@@ -46,3 +46,22 @@ export const InviteNewUserFormInputSchema = z.object({
 export type InviteNewUserFormInput = z.infer<typeof InviteNewUserFormInputSchema> & {
   communityId: string | undefined;
 };
+
+export type CommunityInvitation = {
+  id: number;
+  username: string;
+  userLastName: string;
+  userEmail: string;
+  userCommunityRole: UserCommunityRole;
+  invitationStatus: InvitationStatus;
+  sentAt: string;
+  sentByName: string;
+  sentByLastname: string;
+};
+
+export enum InvitationStatus {
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  CANCELLED = 'CANCELLED',
+}

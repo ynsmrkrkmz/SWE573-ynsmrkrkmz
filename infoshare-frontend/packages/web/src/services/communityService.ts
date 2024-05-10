@@ -5,6 +5,7 @@ import { User } from 'types/userTypes';
 import {
   Community,
   CommunityForList,
+  CommunityInvitation,
   CreateCommunityFormInput,
   InviteNewUserFormInput,
 } from 'routes/community/types/communityTypes';
@@ -83,20 +84,6 @@ export const useLeaveCommunity = (options = {}) =>
       return api.fetch({
         method: Apitypes.PUT,
         url: `${baseUrl}/leave-community?communityId=${communityId}`,
-      });
-    },
-    {
-      ...options,
-    }
-  );
-
-export const useInviteUser = (options = {}) =>
-  useMutation(
-    async (data: InviteNewUserFormInput) => {
-      return api.fetch({
-        method: Apitypes.POST,
-        url: `${baseUrl}/invite-user`,
-        data,
       });
     },
     {
