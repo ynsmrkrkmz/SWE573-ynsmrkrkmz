@@ -35,143 +35,157 @@ import java.util.*;
 @CrossOrigin
 public class CommunityController {
 
-    private final CommunityService communityService;
+        private final CommunityService communityService;
 
-    @PostMapping("/create-community")
-    public ResponseEntity<Object> createCommunity(@AuthenticationPrincipal User authUser,
-            @RequestBody CreateCommunityRequest request) {
-        boolean response = communityService.createCommunity(authUser, request);
+        @PostMapping("/create-community")
+        public ResponseEntity<Object> createCommunity(@AuthenticationPrincipal User authUser,
+                        @RequestBody CreateCommunityRequest request) {
+                boolean response = communityService.createCommunity(authUser, request);
 
-        if (!response)
-            return ResponseHandler.generateResponse("Community creation failed", HttpStatus.BAD_REQUEST, null);
-        return ResponseHandler.generateResponse("Community created successfully", HttpStatus.OK, null);
-    }
+                if (!response)
+                        return ResponseHandler.generateResponse("Community creation failed", HttpStatus.BAD_REQUEST,
+                                        null);
+                return ResponseHandler.generateResponse("Community created successfully", HttpStatus.OK, null);
+        }
 
-    @GetMapping("/all")
-    public ResponseEntity<Object> getAllCommunities() {
-        List<Community> response = communityService.getAllCommunities();
+        @GetMapping("/all")
+        public ResponseEntity<Object> getAllCommunities() {
+                List<Community> response = communityService.getAllCommunities();
 
-        if (response == null)
-            return ResponseHandler.generateResponse("Could not get communities", HttpStatus.BAD_REQUEST, null);
+                if (response == null)
+                        return ResponseHandler.generateResponse("Could not get communities", HttpStatus.BAD_REQUEST,
+                                        null);
 
-        List<CommunityListResponse> communities = response.stream().map(c -> CommunityListResponse.builder()
-                .id(c.getId())
-                .name(c.getName())
-                .imageUrl(c.getImageUrl())
-                .memberCount(c.getUsers().size())
-                .build()).toList();
-        return ResponseHandler.generateResponse("Communities has been found successfully", HttpStatus.OK, communities);
-    }
+                List<CommunityListResponse> communities = response.stream().map(c -> CommunityListResponse.builder()
+                                .id(c.getId())
+                                .name(c.getName())
+                                .imageUrl(c.getImageUrl())
+                                .memberCount(c.getUsers().size())
+                                .build()).toList();
+                return ResponseHandler.generateResponse("Communities has been found successfully", HttpStatus.OK,
+                                communities);
+        }
 
-    @GetMapping
-    public ResponseEntity<Object> getUserCommunities(@AuthenticationPrincipal User authUser) {
-        List<CommunityUser> response = communityService.getUserCommunities(authUser);
+        @GetMapping("/mine")
+        public ResponseEntity<Object> getUserCommunities(@AuthenticationPrincipal User authUser) {
+                List<CommunityUser> response = communityService.getUserCommunities(authUser);
 
-        if (response == null)
-            return ResponseHandler.generateResponse("Could not find user communities", HttpStatus.BAD_REQUEST, null);
+                if (response == null)
+                        return ResponseHandler.generateResponse("Could not find user communities",
+                                        HttpStatus.BAD_REQUEST, null);
 
-        List<CommunityListResponse> communities = response.stream().map(c -> CommunityListResponse.builder()
-                .id(c.getCommunity().getId())
-                .name(c.getCommunity().getName())
-                .imageUrl(c.getCommunity().getImageUrl())
-                .memberCount(c.getCommunity().getUsers().size())
-                .build()).toList();
-        return ResponseHandler.generateResponse("Communities has been found successfully", HttpStatus.OK, communities);
-    }
+                List<CommunityListResponse> communities = response.stream().map(c -> CommunityListResponse.builder()
+                                .id(c.getCommunity().getId())
+                                .name(c.getCommunity().getName())
+                                .imageUrl(c.getCommunity().getImageUrl())
+                                .memberCount(c.getCommunity().getUsers().size())
+                                .build()).toList();
+                return ResponseHandler.generateResponse("Communities has been found successfully", HttpStatus.OK,
+                                communities);
+        }
 
-    @GetMapping("/{communityId}")
-    public ResponseEntity<Object> getCommunityDetailsById(@PathVariable("communityId") Long communityId) {
-        Community response = communityService.getCommunityDetailsById(communityId);
+        @GetMapping("/{communityId}")
+        public ResponseEntity<Object> getCommunityDetailsById(@AuthenticationPrincipal User authUser,
+                        @PathVariable("communityId") Long communityId) {
+                Community response = communityService.getCommunityDetailsById(communityId);
 
-        if (response == null)
-            return ResponseHandler.generateResponse("Could not get community details", HttpStatus.BAD_REQUEST, null);
+                if (response == null)
+                        return ResponseHandler.generateResponse("Could not get community details",
+                                        HttpStatus.BAD_REQUEST, null);
 
-        List<UserResponse> users = !response.isPrivate() ? response.getUsers().stream().map(u -> UserResponse.builder()
-                .name(u.getUser().getName())
-                .lastname(u.getUser().getLastname())
-                .email(u.getUser().getEmail())
-                .role(u.getUser().getRole())
-                .id(u.getUser().getId())
-                .userCommunityRole(u.getUserCommunityRole())
-                .build()).toList() : Collections.emptyList();
+                boolean joined = response.getUsers().stream()
+                                .anyMatch(c -> Objects.equals(c.getUser().getId(), authUser.getId()));
 
-        CommunityDetailsResponse detailsResponse = CommunityDetailsResponse.builder().name(response.getName())
-                .description(response.getDescription())
-                .imageUrl(response.getImageUrl())
-                .isPrivate(response.isPrivate())
-                .users(users)
-                .build();
+                List<UserResponse> users = !response.isPrivate() || joined
+                                ? response.getUsers().stream().map(u -> UserResponse.builder()
+                                                .name(u.getUser().getName())
+                                                .lastname(u.getUser().getLastname())
+                                                .email(u.getUser().getEmail())
+                                                .id(u.getUser().getId())
+                                                .userCommunityRole(u.getUserCommunityRole())
+                                                .build()).toList()
+                                : Collections.emptyList();
 
-        return ResponseHandler.generateResponse("Community details have been taken successfully", HttpStatus.OK,
-                detailsResponse);
-    }
+                CommunityDetailsResponse detailsResponse = CommunityDetailsResponse.builder()
+                                .name(response.getName())
+                                .description(response.getDescription())
+                                .imageUrl(response.getImageUrl())
+                                .isPrivate(response.isPrivate())
+                                .users(users)
+                                .isJoined(joined)
+                                .memberCount(response.getUsers().size())
+                                .build();
 
-    @PostMapping("/join-community")
-    public ResponseEntity<Object> joinCommunity(@AuthenticationPrincipal User authUser,
-            @RequestParam("communityId") Long communityId) {
+                return ResponseHandler.generateResponse("Community details have been taken successfully", HttpStatus.OK,
+                                detailsResponse);
+        }
 
-        boolean response = communityService.joinCommunity(authUser, communityId);
+        @PostMapping("/join-community")
+        public ResponseEntity<Object> joinCommunity(@AuthenticationPrincipal User authUser,
+                        @RequestParam("communityId") Long communityId) {
 
-        if (!response)
-            return ResponseHandler.generateResponse("Could not join community", HttpStatus.BAD_REQUEST,
-                    null);
+                boolean response = communityService.joinCommunity(authUser, communityId);
 
-        return ResponseHandler.generateResponse("Joined community successfully", HttpStatus.OK,
-                null);
-    }
+                if (!response)
+                        return ResponseHandler.generateResponse("Could not join community", HttpStatus.BAD_REQUEST,
+                                        null);
 
-    @PostMapping("/invite-user")
-    public ResponseEntity<Object> inviteUser(@AuthenticationPrincipal User authUser,
-            @RequestBody InviteUserRequest request) {
+                return ResponseHandler.generateResponse("Joined community successfully", HttpStatus.OK,
+                                null);
+        }
 
-        boolean response = communityService.inviteUser(authUser, request);
+        @PostMapping("/invite-user")
+        public ResponseEntity<Object> inviteUser(@AuthenticationPrincipal User authUser,
+                        @RequestBody InviteUserRequest request) {
 
-        if (!response)
-            return ResponseHandler.generateResponse("Could not invite the user", HttpStatus.BAD_REQUEST,
-                    null);
+                boolean response = communityService.inviteUser(authUser, request);
 
-        return ResponseHandler.generateResponse("Invitation sent successfully", HttpStatus.OK,
-                null);
-    }
+                if (!response)
+                        return ResponseHandler.generateResponse("Could not invite the user", HttpStatus.BAD_REQUEST,
+                                        null);
 
-    @PutMapping("/cancel-invitation")
-    public ResponseEntity<Object> cancelInvitation(@AuthenticationPrincipal User authUser,
-            @RequestParam("invitationId") Long invitationId) {
-        boolean response = communityService.cancelInvitation(authUser, invitationId);
+                return ResponseHandler.generateResponse("Invitation sent successfully", HttpStatus.OK,
+                                null);
+        }
 
-        if (!response)
-            return ResponseHandler.generateResponse("Could not cancel invitation", HttpStatus.BAD_REQUEST,
-                    null);
+        @PutMapping("/cancel-invitation")
+        public ResponseEntity<Object> cancelInvitation(@AuthenticationPrincipal User authUser,
+                        @RequestParam("invitationId") Long invitationId) {
+                boolean response = communityService.cancelInvitation(authUser, invitationId);
 
-        return ResponseHandler.generateResponse("Invitation cancelled successfully", HttpStatus.OK,
-                null);
-    }
+                if (!response)
+                        return ResponseHandler.generateResponse("Could not cancel invitation", HttpStatus.BAD_REQUEST,
+                                        null);
 
-    @PutMapping("/respond-invitation")
-    public ResponseEntity<Object> respondInvitation(@AuthenticationPrincipal User authUser,
-            @RequestParam("invitationId") Long invitationId,
-            @RequestParam("invitationStatus") InvitationStatus invitationStatus) {
-        boolean response = communityService.respondInvitation(authUser, invitationId, invitationStatus);
+                return ResponseHandler.generateResponse("Invitation cancelled successfully", HttpStatus.OK,
+                                null);
+        }
 
-        if (!response)
-            return ResponseHandler.generateResponse("Could not respond invitation", HttpStatus.BAD_REQUEST,
-                    null);
+        @PutMapping("/respond-invitation")
+        public ResponseEntity<Object> respondInvitation(@AuthenticationPrincipal User authUser,
+                        @RequestParam("invitationId") Long invitationId,
+                        @RequestParam("invitationStatus") InvitationStatus invitationStatus) {
+                boolean response = communityService.respondInvitation(authUser, invitationId, invitationStatus);
 
-        return ResponseHandler.generateResponse("Invitation responded successfully", HttpStatus.OK,
-                null);
-    }
+                if (!response)
+                        return ResponseHandler.generateResponse("Could not respond invitation", HttpStatus.BAD_REQUEST,
+                                        null);
 
-    @PutMapping("/leave-community")
-    public ResponseEntity<Object> leaveCommunity(@AuthenticationPrincipal User authUser,
-            @RequestParam("communityId") Long communityId) {
-        boolean response = communityService.leaveCommunity(authUser, communityId);
+                return ResponseHandler.generateResponse("Invitation responded successfully", HttpStatus.OK,
+                                null);
+        }
 
-        if (!response)
-            return ResponseHandler.generateResponse("Could not leave community", HttpStatus.BAD_REQUEST,
-                    null);
+        @PutMapping("/leave-community")
+        public ResponseEntity<Object> leaveCommunity(@AuthenticationPrincipal User authUser,
+                        @RequestParam("communityId") Long communityId) {
+                boolean response = communityService.leaveCommunity(authUser, communityId);
 
-        return ResponseHandler.generateResponse("Community was left successfully", HttpStatus.OK,
-                null);
-    }
+                if (!response)
+                        return ResponseHandler.generateResponse("Could not leave community", HttpStatus.BAD_REQUEST,
+                                        null);
+
+                return ResponseHandler.generateResponse("Community was left successfully", HttpStatus.OK,
+                                null);
+        }
 
 }

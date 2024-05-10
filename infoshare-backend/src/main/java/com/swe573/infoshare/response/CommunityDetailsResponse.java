@@ -12,9 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommunityDetailsResponse {
+    private Long id;
     private String name;
     private String description;
     private String imageUrl;
-    private boolean isPrivate;
+    private Boolean isPrivate;
+    private Boolean isJoined;
+    private Integer memberCount;
     private List<UserResponse> users;
 }

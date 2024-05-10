@@ -23,7 +23,7 @@ import { useAuthContext } from 'contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import useFormResolver from 'hooks/useFormResolver';
 import { FieldValues, useForm } from 'react-hook-form';
-import { LoginFormInputSchema } from 'types';
+import { LoginFormInputSchema } from 'types/userTypes';
 import Root from './Login.style';
 import { useLogin } from 'services/userService';
 import useHandleError from 'hooks/useHandleError';

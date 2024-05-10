@@ -30,7 +30,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
                 .build();
-        if(userRepository.findByEmail(request.getEmail()).isEmpty()){
+        if (userRepository.findByEmail(request.getEmail()).isEmpty()) {
             userRepository.save(user);
         }
 
@@ -39,10 +39,13 @@ public class AuthService {
 
     public String authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()));
+                request.getEmail(),
+                request.getPassword()));
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         return jwtService.generateToken(user);
     }
 
+    public User getUserDetails(Long userId) {
+        return userRepository.getReferenceById(userId);
+    }
 }

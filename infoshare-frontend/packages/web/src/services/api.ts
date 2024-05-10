@@ -1,4 +1,11 @@
-import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axios, {
+  AxiosHeaders,
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+  HeadersDefaults,
+  RawAxiosRequestHeaders,
+} from 'axios';
 import { ApiResponse, Apitypes, ResponseMeta } from 'types';
 import { getToken } from 'utils/authentication';
 
@@ -25,17 +32,18 @@ class Api {
     method = Apitypes.GET,
     data,
     headers,
-    useAuthorizationHeader,
+    useAuthorizationHeader = true,
     rawResponse,
     ...restConfig
   }: FetchConfig): ApiResponse<T> {
-    let extendedHeaders: AxiosRequestHeaders = {
+    let extendedHeaders: RawAxiosRequestHeaders = {
       'Content-Language': this.language,
     };
 
     if (useAuthorizationHeader) {
+      this.token = getToken();
       if (this.token) {
-        extendedHeaders.authorization = `Bearer ${this.token}`;
+        extendedHeaders.Authorization = `Bearer ${this.token}`;
       }
     }
 

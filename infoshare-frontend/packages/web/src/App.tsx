@@ -11,13 +11,13 @@ import PropTypes from 'prop-types';
 import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import GlobalStyles, { AppLoaderWrapper } from './App.style';
-import SignInRoute from 'routes/login';
 import LoginRoute from 'routes/login';
 import SignupRoute from 'routes/signup';
+import CommunityRoute from 'routes/community';
 
 const App: FC = () => {
   const { isLoading } = useAuthContext();
-
+  document.body.style.overflow = 'hidden';
   return (
     <>
       <CssBaseline />
@@ -33,9 +33,10 @@ const App: FC = () => {
       {!isLoading && (
         <Routes>
           {/* Default Layout */}
-          <Route element={<DefaultLayout />}>
-            <Route element={<RequireAuthentication />}>
+          <Route element={<RequireAuthentication />}>
+            <Route element={<DefaultLayout />}>
               <Route path="/*" element={<h3>default</h3>} />
+              <Route path="/communities/*" element={<CommunityRoute />} />
             </Route>
           </Route>
 
