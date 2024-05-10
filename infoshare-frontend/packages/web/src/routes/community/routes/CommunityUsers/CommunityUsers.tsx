@@ -202,4 +202,4 @@ const CommunityUsers: FC = () => {
   );
 };
 
-export default CommunityUsers;
+export { CommunityUsers };

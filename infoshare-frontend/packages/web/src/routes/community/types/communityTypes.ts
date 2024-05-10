@@ -7,8 +7,8 @@ export type Community = {
   name: string;
   description: string;
   imageUrl: string | null;
-  private: boolean;
-  joined: boolean;
+  isPrivate: boolean;
+  isJoined: boolean;
   memberCount: number;
   users: User[] | null;
 };

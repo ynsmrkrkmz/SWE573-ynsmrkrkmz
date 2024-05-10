@@ -144,11 +144,11 @@ const CommunityDetailsRoot: FC = () => {
           )}
           action={
             communityData &&
-            (communityData.joined ? (
+            (communityData.isJoined ? (
               <LoadingButton variant="contained" loading={leaveIsLoading} onClick={handleLeave}>
                 <Typography>{intl.formatMessage({ id: 'community.leave' })}</Typography>
               </LoadingButton>
-            ) : !communityData.private ? (
+            ) : !communityData.isPrivate ? (
               <LoadingButton loading={joinIsLoading} onClick={handleJoin}>
                 <Typography>{intl.formatMessage({ id: 'community.join' })}</Typography>
               </LoadingButton>
@@ -156,9 +156,10 @@ const CommunityDetailsRoot: FC = () => {
           }
         />
         <CardActions>
-          {communityMenuItems.map((menuItem) =>
+          {communityMenuItems.map((menuItem, index) =>
             menuItem.visible ? (
               <Button
+                key={index}
                 variant="outlined"
                 sx={{ minWidth: 100 }}
                 onClick={() => navigate(`./${menuItem.link}`)}
@@ -174,4 +175,4 @@ const CommunityDetailsRoot: FC = () => {
   );
 };
 
-export default CommunityDetailsRoot;
+export { CommunityDetailsRoot };

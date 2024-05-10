@@ -1,1 +1,1 @@
-export { default } from './CreateCommunity';
+export { CreateCommunity } from './CreateCommunity';

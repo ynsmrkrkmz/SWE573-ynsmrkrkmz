@@ -7,7 +7,7 @@ import { useAllCommunities } from 'services/communityService';
 import CommunityCard from 'routes/community/components/CommunityCard';
 import ContentLoading from 'components/ContentLoading';
 
-const Communitylist: FC = () => {
+const CommunityList: FC = () => {
   const intl = useIntl();
 
   const { data, isLoading } = useAllCommunities();
@@ -43,4 +43,4 @@ const Communitylist: FC = () => {
   );
 };
 
-export default Communitylist;
+export { CommunityList };

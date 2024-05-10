@@ -126,4 +126,4 @@ const CommunityInvitations: FC = () => {
   );
 };
 
-export default CommunityInvitations;
+export { CommunityInvitations };

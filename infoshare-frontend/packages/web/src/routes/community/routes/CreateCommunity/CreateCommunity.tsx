@@ -65,6 +65,12 @@ const CreateCommunity: FC = () => {
       imageUrl: null,
       isPrivate: isPrivate,
     });
+    console.log({
+      name: communityName,
+      description: markdown ?? '',
+      imageUrl: null,
+      isPrivate: isPrivate,
+    });
   };
 
   return (
@@ -143,4 +149,4 @@ const CreateCommunity: FC = () => {
   );
 };
 
-export default CreateCommunity;
+export { CreateCommunity };

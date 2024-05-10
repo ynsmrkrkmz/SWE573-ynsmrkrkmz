@@ -2,14 +2,14 @@ import { useAppContext } from 'contexts/AppContext';
 import { FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import CommunityDetailsRoot from './components/CommunityDetailsRoot';
+import { CommunityDetailsRoot } from './components/CommunityDetailsRoot';
 import { CommunityProvider } from './contexts/CommunityContext';
-import CommunityAbout from './routes/CommunityAbout';
-import CommunityInvitations from './routes/CommunityInvitations';
-import CommunityList from './routes/CommunityList';
-import CommunityNewInvitation from './routes/CommunityNewInvitation';
-import CommunityUsers from './routes/CommunityUsers';
-import CreateCommunity from './routes/CreateCommunity';
+import { CommunityInvitations } from './routes/CommunityInvitations';
+import { CommunityUsers } from './routes/CommunityUsers';
+import { CreateCommunity } from './routes/CreateCommunity';
+import { CommunityList } from './routes/CommunityList';
+import { CommunityAbout } from './routes/CommunityAbout';
+import { CommunityNewInvitation } from './routes/CommunityNewInvitation';
 
 const CommunityRoute: FC = () => {
   const { setPageName } = useAppContext();

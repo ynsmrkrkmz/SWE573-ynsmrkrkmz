@@ -1,1 +1,1 @@
-export { default } from './CommunityNewInvitation';
+export { CommunityNewInvitation } from './CommunityNewInvitation';

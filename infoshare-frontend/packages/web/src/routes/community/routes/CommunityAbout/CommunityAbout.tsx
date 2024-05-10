@@ -31,4 +31,4 @@ const CommunityAbout: FC = () => {
   );
 };
 
-export default CommunityAbout;
+export { CommunityAbout };

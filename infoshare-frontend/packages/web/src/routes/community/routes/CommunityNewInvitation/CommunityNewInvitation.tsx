@@ -13,7 +13,7 @@ import { useInviteUser } from 'services/communityService';
 import { UserCommunityRole } from 'types/userTypes';
 import Root from './CommunityNewInvitation.style';
 
-const Communitylist: FC = () => {
+const CommunityNewInvitation: FC = () => {
   const intl = useIntl();
   const formResolver = useFormResolver();
   const navigate = useNavigate();
@@ -115,4 +115,4 @@ const Communitylist: FC = () => {
   );
 };
 
-export default Communitylist;
+export { CommunityNewInvitation };
