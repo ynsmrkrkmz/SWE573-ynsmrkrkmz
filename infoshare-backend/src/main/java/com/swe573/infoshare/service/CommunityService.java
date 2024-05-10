@@ -64,7 +64,7 @@ public class CommunityService {
     }
 
     public List<Community> getAllCommunities() {
-        return communityRepository.findByDeleted(false);
+        return communityRepository.findByIsPrivateAndDeleted(false, false);
     }
 
     public boolean joinCommunity(User user, Long communityId) {

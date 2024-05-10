@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface CommunityRepository extends JpaRepository<Community, Long> {
-    List<Community> findByDeleted(boolean deleted);
+    List<Community> findByDeleted(Boolean deleted);
+
+    List<Community> findByIsPrivateAndDeleted(Boolean isPrivate, Boolean deleted);
 }
