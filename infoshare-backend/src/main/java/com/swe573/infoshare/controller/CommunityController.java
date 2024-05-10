@@ -1,5 +1,9 @@
 package com.swe573.infoshare.controller;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,18 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.swe573.infoshare.handler.ResponseHandler;
 import com.swe573.infoshare.model.Community;
 import com.swe573.infoshare.model.CommunityUser;
-import com.swe573.infoshare.model.InvitationStatus;
 import com.swe573.infoshare.model.User;
 import com.swe573.infoshare.request.community.CreateCommunityRequest;
-import com.swe573.infoshare.request.community.InviteUserRequest;
 import com.swe573.infoshare.response.CommunityDetailsResponse;
 import com.swe573.infoshare.response.CommunityListResponse;
 import com.swe573.infoshare.response.UserResponse;
 import com.swe573.infoshare.service.CommunityService;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/communities")
@@ -131,47 +131,6 @@ public class CommunityController {
                                         null);
 
                 return ResponseHandler.generateResponse("Joined community successfully", HttpStatus.OK,
-                                null);
-        }
-
-        @PostMapping("/invite-user")
-        public ResponseEntity<Object> inviteUser(@AuthenticationPrincipal User authUser,
-                        @RequestBody InviteUserRequest request) {
-
-                boolean response = communityService.inviteUser(authUser, request);
-
-                if (!response)
-                        return ResponseHandler.generateResponse("Could not invite the user", HttpStatus.BAD_REQUEST,
-                                        null);
-
-                return ResponseHandler.generateResponse("Invitation sent successfully", HttpStatus.OK,
-                                null);
-        }
-
-        @PutMapping("/cancel-invitation")
-        public ResponseEntity<Object> cancelInvitation(@AuthenticationPrincipal User authUser,
-                        @RequestParam("invitationId") Long invitationId) {
-                boolean response = communityService.cancelInvitation(authUser, invitationId);
-
-                if (!response)
-                        return ResponseHandler.generateResponse("Could not cancel invitation", HttpStatus.BAD_REQUEST,
-                                        null);
-
-                return ResponseHandler.generateResponse("Invitation cancelled successfully", HttpStatus.OK,
-                                null);
-        }
-
-        @PutMapping("/respond-invitation")
-        public ResponseEntity<Object> respondInvitation(@AuthenticationPrincipal User authUser,
-                        @RequestParam("invitationId") Long invitationId,
-                        @RequestParam("invitationStatus") InvitationStatus invitationStatus) {
-                boolean response = communityService.respondInvitation(authUser, invitationId, invitationStatus);
-
-                if (!response)
-                        return ResponseHandler.generateResponse("Could not respond invitation", HttpStatus.BAD_REQUEST,
-                                        null);
-
-                return ResponseHandler.generateResponse("Invitation responded successfully", HttpStatus.OK,
                                 null);
         }
 
