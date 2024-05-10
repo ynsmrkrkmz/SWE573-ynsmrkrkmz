@@ -38,7 +38,7 @@ public class CommunityService {
                 .description(request.getDescription())
                 .imageUrl(request.getImageUrl())
                 .createdBy(authUser)
-                .isPrivate(request.isPrivate())
+                .isPrivate(request.getIsPrivate())
                 .build();
 
         Community createdCommunity = communityRepository.save(community);

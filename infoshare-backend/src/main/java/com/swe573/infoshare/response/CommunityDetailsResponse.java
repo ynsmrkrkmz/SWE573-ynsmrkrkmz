@@ -16,8 +16,8 @@ public class CommunityDetailsResponse {
     private String name;
     private String description;
     private String imageUrl;
-    private boolean isPrivate;
-    private boolean isJoined;
+    private Boolean isPrivate;
+    private Boolean isJoined;
     private Integer memberCount;
     private List<UserResponse> users;
 }

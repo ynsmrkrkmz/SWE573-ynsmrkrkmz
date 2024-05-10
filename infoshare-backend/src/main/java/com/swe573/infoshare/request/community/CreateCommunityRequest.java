@@ -13,5 +13,5 @@ public class CreateCommunityRequest {
     private String name;
     private String description;
     private String imageUrl;
-    private boolean isPrivate;
+    private Boolean isPrivate;
 }
