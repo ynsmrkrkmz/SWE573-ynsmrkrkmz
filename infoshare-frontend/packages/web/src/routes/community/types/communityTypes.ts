@@ -66,3 +66,9 @@ export enum InvitationStatus {
   REJECTED = 'REJECTED',
   CANCELLED = 'CANCELLED',
 }
+
+export type PostTemplateField = {
+  fieldName: string;
+  fieldType: string | number;
+  isRequired: boolean;
+};

@@ -1,0 +1,1 @@
+export { CommunityNewPost } from './CommunityNewPost';
