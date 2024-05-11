@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.swe573.infoshare.exceptions.LastOwnerCannotLeaveException;
+import com.swe573.infoshare.exceptions.UserAlreadyAMemberException;
 import com.swe573.infoshare.model.Community;
 import com.swe573.infoshare.model.CommunityUser;
 import com.swe573.infoshare.model.CommunityUserId;
@@ -58,11 +60,11 @@ public class CommunityService {
         return communityRepository.findByIsPrivateAndDeleted(false, false);
     }
 
-    public boolean joinCommunity(User user, Long communityId) {
+    public boolean joinCommunity(User user, Long communityId, UserCommunityRole userCommunityRole) {
 
         Community community = communityRepository.getReferenceById(communityId);
 
-        if (community.isPrivate())
+        if (community.getIsPrivate().booleanValue())
             return false;
 
         CommunityUserId communityUserId = new CommunityUserId(communityId, user.getId());
@@ -74,7 +76,7 @@ public class CommunityService {
                     .builder()
                     .id(communityUserId)
                     .createdBy(user)
-                    .userCommunityRole(UserCommunityRole.MEMBER)
+                    .userCommunityRole(userCommunityRole)
                     .build();
 
             communityUserRepository.save(communityUser);
@@ -82,7 +84,10 @@ public class CommunityService {
             return true;
         }
 
-        existingCommunityUser.get().setUserCommunityRole(UserCommunityRole.MEMBER);
+        if (!existingCommunityUser.get().getDeleted().booleanValue())
+            throw new UserAlreadyAMemberException(user.getEmail());
+
+        existingCommunityUser.get().setUserCommunityRole(userCommunityRole);
         existingCommunityUser.get().setDeleted(false);
         existingCommunityUser.get().setUpdatedBy(user);
         existingCommunityUser.get().setUpdatedAt(OffsetDateTime.now());
@@ -95,13 +100,15 @@ public class CommunityService {
 
     public boolean leaveCommunity(User authUser, Long communityId) {
 
+        Community community = communityRepository.getReferenceById(communityId);
+
         CommunityUserId communityUserId = new CommunityUserId(communityId, authUser.getId());
         CommunityUser communityUser = communityUserRepository.getReferenceById(communityUserId);
         List<CommunityUser> owners = communityUserRepository
-                .findAllByUserCommunityRole(UserCommunityRole.OWNER);
+                .findAllByCommunityAndUserCommunityRoleAndDeleted(community, UserCommunityRole.OWNER, false);
 
         if (owners.size() == 1)
-            return false;
+            throw new LastOwnerCannotLeaveException();
 
         if (!communityUser.getUser().getId().equals(authUser.getId()))
             return false;

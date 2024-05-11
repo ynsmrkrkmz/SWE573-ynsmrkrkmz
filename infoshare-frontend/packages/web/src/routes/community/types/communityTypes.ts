@@ -57,6 +57,7 @@ export type CommunityInvitation = {
   sentAt: string;
   sentByName: string;
   sentByLastname: string;
+  communityName: string;
 };
 
 export enum InvitationStatus {

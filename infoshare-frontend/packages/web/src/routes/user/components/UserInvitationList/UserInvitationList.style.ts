@@ -17,7 +17,7 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   borderRadius: '0px 3px',
   borderColor: '#ebedf5',
   boxShadow: '0px 4px 4px 0px #eef1fb',
-  minHeight: '470px',
+  minHeight: '650px',
 }));
 
 export const cardSubTitle = css``;

@@ -14,6 +14,7 @@ import GlobalStyles, { AppLoaderWrapper } from './App.style';
 import LoginRoute from 'routes/login';
 import SignupRoute from 'routes/signup';
 import CommunityRoute from 'routes/community';
+import { UserRoute } from 'routes/user';
 
 const App: FC = () => {
   const { isLoading } = useAuthContext();
@@ -37,6 +38,7 @@ const App: FC = () => {
             <Route element={<DefaultLayout />}>
               <Route path="/*" element={<h3>default</h3>} />
               <Route path="/communities/*" element={<CommunityRoute />} />
+              <Route path="/user/*" element={<UserRoute />} />
             </Route>
           </Route>
 

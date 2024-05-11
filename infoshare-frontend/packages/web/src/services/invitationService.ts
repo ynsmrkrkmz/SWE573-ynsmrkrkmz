@@ -39,6 +39,19 @@ export const useGetCommunityInvitations = (communityId: string | undefined, enab
     }
   );
 
+export const useGetUserInvitations = (enabled = true) =>
+  useQuery(
+    ['user-invitations'],
+    async () => {
+      return api.fetch<CommunityInvitation[]>({
+        url: `${baseUrl}`,
+      });
+    },
+    {
+      enabled,
+    }
+  );
+
 export const useCancelInvitation = (options = {}) =>
   useMutation(
     async (invitationId: string | undefined) => {

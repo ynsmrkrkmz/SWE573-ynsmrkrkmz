@@ -16,7 +16,17 @@ const DefaultLayout = () => {
             <LeftMenu />
           </Box>
           <Divider orientation="vertical" flexItem />
-          <Box sx={{ flexGrow: 1, overflow: 'overlay' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexGrow: 1,
+              flexDirection: 'column',
+              overflow: 'hidden',
+              overflowY: 'auto',
+              maxHeight: 'calc(100vh - 105px)',
+              p: 5,
+            }}
+          >
             <Outlet />
           </Box>
         </Stack>
