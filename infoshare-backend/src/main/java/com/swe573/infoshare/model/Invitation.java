@@ -12,11 +12,11 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @Entity
-@Table(name = "community_invitation")
+@Table(name = "invitation")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Where(clause = "deleted = false")
-public class CommunityInvitation extends BaseEntity {
+public class Invitation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

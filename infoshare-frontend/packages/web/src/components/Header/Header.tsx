@@ -25,6 +25,7 @@ import { useIntl } from 'react-intl';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppBar } from './Header.style';
 import { Link as MuiLink } from '@mui/material';
+import { BsSendArrowDownFill } from 'react-icons/bs';
 
 const Header: FC = () => {
   const intl = useIntl();
@@ -105,11 +106,17 @@ const Header: FC = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
-                <MenuItem component={Link} to="/settings">
+                <MenuItem component={Link} to="/user/profile">
                   <ListItemIcon>
                     <Settings fontSize="small" />
                   </ListItemIcon>
-                  {intl.formatMessage({ id: 'generic.settings' })}
+                  {intl.formatMessage({ id: 'user.profile' })}
+                </MenuItem>
+                <MenuItem component={Link} to="/user/invitations">
+                  <ListItemIcon>
+                    <BsSendArrowDownFill fontSize="large" />
+                  </ListItemIcon>
+                  {intl.formatMessage({ id: 'user.invitations' })}
                 </MenuItem>
                 <MenuItem onClick={signOut}>
                   <ListItemIcon>

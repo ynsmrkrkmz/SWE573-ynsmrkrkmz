@@ -33,5 +33,5 @@ public abstract class BaseEntity {
 
     @Builder.Default
     @Column(name = "deleted", nullable = false)
-    private boolean deleted = false;
+    private Boolean deleted = false;
 }

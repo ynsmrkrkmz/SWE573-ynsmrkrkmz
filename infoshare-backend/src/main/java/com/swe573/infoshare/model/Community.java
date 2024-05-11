@@ -36,15 +36,10 @@ public class Community extends BaseEntity {
 
     @Builder.Default
     @Column(name = "is_private", nullable = false)
-    private boolean isPrivate = true;
+    private Boolean isPrivate = true;
 
     @Builder.Default
     @OneToMany(mappedBy = "community", targetEntity = CommunityUser.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @Where(clause = "deleted = false")
     private List<CommunityUser> users = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "community", targetEntity = CommunityInvitation.class, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Where(clause = "deleted = false")
-    private List<CommunityInvitation> invitations = new ArrayList<>();
 }

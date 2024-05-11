@@ -21,6 +21,7 @@ import com.swe573.infoshare.handler.ResponseHandler;
 import com.swe573.infoshare.model.Community;
 import com.swe573.infoshare.model.CommunityUser;
 import com.swe573.infoshare.model.User;
+import com.swe573.infoshare.model.UserCommunityRole;
 import com.swe573.infoshare.request.community.CreateCommunityRequest;
 import com.swe573.infoshare.response.CommunityDetailsResponse;
 import com.swe573.infoshare.response.CommunityListResponse;
@@ -96,7 +97,7 @@ public class CommunityController {
                 boolean joined = response.getUsers().stream()
                                 .anyMatch(c -> Objects.equals(c.getUser().getId(), authUser.getId()));
 
-                List<UserResponse> users = !response.isPrivate() || joined
+                List<UserResponse> users = !response.getIsPrivate().booleanValue() || joined
                                 ? response.getUsers().stream().map(u -> UserResponse.builder()
                                                 .name(u.getUser().getName())
                                                 .lastname(u.getUser().getLastname())
@@ -110,7 +111,7 @@ public class CommunityController {
                                 .name(response.getName())
                                 .description(response.getDescription())
                                 .imageUrl(response.getImageUrl())
-                                .isPrivate(response.isPrivate())
+                                .isPrivate(response.getIsPrivate())
                                 .users(users)
                                 .isJoined(joined)
                                 .memberCount(response.getUsers().size())
@@ -124,7 +125,7 @@ public class CommunityController {
         public ResponseEntity<Object> joinCommunity(@AuthenticationPrincipal User authUser,
                         @RequestParam("communityId") Long communityId) {
 
-                boolean response = communityService.joinCommunity(authUser, communityId);
+                boolean response = communityService.joinCommunity(authUser, communityId, UserCommunityRole.MEMBER);
 
                 if (!response)
                         return ResponseHandler.generateResponse("Could not join community", HttpStatus.BAD_REQUEST,

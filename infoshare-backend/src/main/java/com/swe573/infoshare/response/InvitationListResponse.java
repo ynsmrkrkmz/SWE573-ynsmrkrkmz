@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommunityInvitationListResponse {
+public class InvitationListResponse {
     private Long id;
     private String username;
     private String userLastname;
@@ -24,4 +24,5 @@ public class CommunityInvitationListResponse {
     private OffsetDateTime sentAt;
     private String sentByName;
     private String sentByLastname;
+    private String communityName;
 }

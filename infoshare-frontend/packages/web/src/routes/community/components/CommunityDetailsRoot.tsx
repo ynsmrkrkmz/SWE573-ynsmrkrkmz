@@ -58,6 +58,7 @@ const CommunityDetailsRoot: FC = () => {
         queryKey: ['user-communities'],
         exact: true,
       });
+      navigate('./');
     },
   });
 
@@ -124,7 +125,7 @@ const CommunityDetailsRoot: FC = () => {
   return isLoading ? (
     <ContentLoading />
   ) : (
-    <Stack direction={'column'} spacing={2} padding={5}>
+    <Stack direction={'column'} spacing={2}>
       <Card>
         <CardHeader
           titleTypographyProps={{ fontSize: 18 }}

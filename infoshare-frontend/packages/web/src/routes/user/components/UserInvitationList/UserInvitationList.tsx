@@ -12,57 +12,97 @@ import { MdOutlineCancel } from 'react-icons/md';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InvitationStatus } from 'routes/community/types/communityTypes';
-import { StyledDataGrid } from './CommunityInvitationList.style';
-import { useCancelInvitation, useGetCommunityInvitations } from 'services/invitationService';
+import Root, { StyledDataGrid } from './UserInvitationList.style';
+import {
+  useAcceptInvitation,
+  useCancelInvitation,
+  useGetCommunityInvitations,
+  useGetUserInvitations,
+  useRejctInvitation,
+} from 'services/invitationService';
 import ConfirmationDialog from 'components/ComfirmationDialog';
 import { useQueryClient } from '@tanstack/react-query';
 import useNotification from 'hooks/useNotification';
 import { useCommunityContext } from 'routes/community/contexts/CommunityContext';
 import { UserCommunityRole } from 'types/userTypes';
+import { MdOutlineCheckCircle } from 'react-icons/md';
 
-const CommunityInvitationList: FC = () => {
+const UserInvitationList: FC = () => {
   const intl = useIntl();
   const { communityId } = useParams();
   const { authCommunityUser } = useCommunityContext();
   const queryClient = useQueryClient();
-  const { data, isLoading } = useGetCommunityInvitations(communityId);
+  const { data, isLoading } = useGetUserInvitations();
   const { showSuccess } = useNotification();
-  const { mutate } = useCancelInvitation({
-    onSuccess: async () => {
-      showSuccess(intl.formatMessage({ id: 'success.invitationCancelled' }));
-      await queryClient.invalidateQueries({
-        queryKey: ['community-invitations', communityId],
-        exact: true,
-      });
-    },
-  });
 
   const [selectedInvitationId, setSelectedInvitationId] = useState<string | null>(null);
-  const [dialogCancelInvitationOpen, setDialogCancelInvitationOpen] = useState<boolean>(false);
+  const [dialogRejectInvitationOpen, setDialogRejectInvitationOpen] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState<number>(10);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
+  const { mutate: acceptMutate } = useAcceptInvitation({
+    onSuccess: async () => {
+      showSuccess(intl.formatMessage({ id: 'success.invitationAccepted' }));
+      await queryClient.invalidateQueries({
+        queryKey: ['user-invitations'],
+        exact: true,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['user-communities'],
+        exact: true,
+      });
+    },
+    onSettled: () => {
+      setSelectedInvitationId(null);
+      setDialogRejectInvitationOpen(false);
+    },
+  });
+  const { mutate: rejectMutate } = useRejctInvitation({
+    onSuccess: async () => {
+      showSuccess(intl.formatMessage({ id: 'success.invitationRejected' }));
+      await queryClient.invalidateQueries({
+        queryKey: ['user-invitations'],
+        exact: true,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['user-communities'],
+        exact: true,
+      });
+    },
+    onSettled: () => {
+      setSelectedInvitationId(null);
+      setDialogRejectInvitationOpen(false);
+    },
+  });
+
   const handleDialogOpen = (id: string) => () => {
-    setDialogCancelInvitationOpen(true);
+    setDialogRejectInvitationOpen(true);
     setSelectedInvitationId(id);
   };
 
   const handleDialogClose = () => {
-    setDialogCancelInvitationOpen(false);
+    setDialogRejectInvitationOpen(false);
     setSelectedInvitationId(null);
   };
 
-  const cancelInvitation = useCallback(
+  const acceptInvitation = useCallback(
     (id: string) => {
-      mutate(id);
+      acceptMutate(id);
     },
-    [mutate]
+    [acceptMutate]
+  );
+
+  const rejectInvitation = useCallback(
+    (id: string) => {
+      rejectMutate(id);
+    },
+    [rejectMutate]
   );
 
   const handleConfirm = () => {
-    selectedInvitationId && cancelInvitation(selectedInvitationId);
+    selectedInvitationId && rejectInvitation(selectedInvitationId);
   };
 
   const getDate = useCallback(
@@ -90,18 +130,9 @@ const CommunityInvitationList: FC = () => {
         }),
       },
       {
-        field: 'fullname',
+        field: 'communityName',
         headerName: intl.formatMessage({
-          id: 'invitation.invitedUserFullname',
-        }),
-        minWidth: 150,
-        valueGetter: getInvitedUserFullName,
-        flex: 1,
-      },
-      {
-        field: 'userEmail',
-        headerName: intl.formatMessage({
-          id: 'invitation.invitedUserEmail',
+          id: 'invitation.community',
         }),
         minWidth: 200,
         flex: 1,
@@ -138,15 +169,14 @@ const CommunityInvitationList: FC = () => {
         width: 80,
         getActions: (params) => [
           <GridActionsCellItem
-            disabled={
-              (params.row.invitationStatus as InvitationStatus) !== InvitationStatus.PENDING ||
-              authCommunityUser?.userCommunityRole === UserCommunityRole.MEMBER ||
-              (authCommunityUser?.userCommunityRole === UserCommunityRole.MODERATOR &&
-                (params.row.userCommunityRole as UserCommunityRole) !== UserCommunityRole.MEMBER) ||
-              false
-            }
+            icon={<MdOutlineCheckCircle style={{ fontSize: '24px' }} />}
+            label={intl.formatMessage({ id: 'generic.accept' })}
+            onClick={() => acceptInvitation(params.id as string)}
+            showInMenu
+          />,
+          <GridActionsCellItem
             icon={<MdOutlineCancel style={{ fontSize: '24px' }} />}
-            label={intl.formatMessage({ id: 'generic.cancel' })}
+            label={intl.formatMessage({ id: 'generic.reject' })}
             onClick={handleDialogOpen(params.id as string)}
             showInMenu
           />,
@@ -173,7 +203,7 @@ const CommunityInvitationList: FC = () => {
   }, [data?.data]);
 
   return (
-    <>
+    <Root>
       <StyledDataGrid
         loading={isLoading}
         pageSize={pageSize}
@@ -186,15 +216,15 @@ const CommunityInvitationList: FC = () => {
       <ConfirmationDialog
         title={intl.formatMessage({ id: 'generic.areYouSure' })}
         content={intl.formatMessage({
-          id: 'invitation.cancelWarnContent',
+          id: 'invitation.rejectWarnContent',
         })}
-        open={dialogCancelInvitationOpen}
+        open={dialogRejectInvitationOpen}
         onClose={handleDialogClose}
         onConfirm={handleConfirm}
         loading={isLoading}
       />
-    </>
+    </Root>
   );
 };
 
-export { CommunityInvitationList };
+export { UserInvitationList };

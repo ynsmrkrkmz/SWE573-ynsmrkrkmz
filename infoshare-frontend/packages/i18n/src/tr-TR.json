@@ -68,5 +68,12 @@
   "invitation.invitationStatus": "Davet Durumu",
   "generic.areYouSure": "Emin misin?",
   "success.invitationCancelled": "Davet başarıyla iptal edildi",
-  "invitation.cancelWarnContent": "Davtiye iptal edilecek"
+  "invitation.cancelWarnContent": "Davtiye iptal edilecek",
+  "user.profile": "Profilim",
+  "user.invitations": "Davetiyelerim",
+  "generic.accept": "Kabul et",
+  "generic.reject": "Reddet",
+  "success.invitationAccepted": "Davet başarıyla kabul edildi",
+  "success.invitationRejected": "Davet başarıyla reddedildi",
+  "invitation.community": "Davet Edilen Topluluk"
 }
