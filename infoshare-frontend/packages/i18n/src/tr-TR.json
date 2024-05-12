@@ -78,5 +78,9 @@
   "invitation.community": "Davet Edilen Topluluk",
   "post.new": "Yeni Gönderi",
   "post.template": "Gönderi Şablonu",
-  "post.title": "Gönderi Başlığı"
+  "post.title": "Gönderi Başlığı",
+  "error.fieldCantBeBlank": "Alan boş olamaz",
+  "post.submit": "Gönderiyi yayınla",
+  "error.titleCantBeBlank": "Başlık boş olamaz",
+  "success.postSubmitted": "Gönderi başarıyla yayınlandı"
 }

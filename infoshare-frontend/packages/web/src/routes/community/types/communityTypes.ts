@@ -1,4 +1,4 @@
-import { BaseEntity } from 'types';
+import { BaseEntity, FieldTypes } from 'types';
 import { User, UserCommunityRole } from '../../../types/userTypes';
 import { z } from 'zod';
 
@@ -69,6 +69,6 @@ export enum InvitationStatus {
 
 export type PostTemplateField = {
   fieldName: string;
-  fieldType: string | number;
-  isRequired: boolean;
+  fieldType: FieldTypes;
+  required: boolean;
 };
