@@ -1,22 +1,13 @@
-import Cached from '@mui/icons-material/Cached';
-import Check from '@mui/icons-material/Check';
-import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
-import InboxIcon from '@mui/icons-material/Inbox';
-import Info from '@mui/icons-material/Info';
 import { Chip, Typography } from '@mui/material';
-import Icon from '@mui/material/Icon';
-import { useAuthContext } from 'contexts/AuthContext';
 import { FC } from 'react';
+import {
+  BsFillSendCheckFill,
+  BsFillSendDashFill,
+  BsFillSendExclamationFill,
+  BsFillSendXFill,
+} from 'react-icons/bs';
 import { useIntl } from 'react-intl';
 import { InvitationStatus } from 'routes/community/types/communityTypes';
-import { getTranslationKeyByOrganizationType } from 'utils/translation';
-import CancelScheduleSendIcon from '@mui/icons-material/CancelScheduleSend';
-import PendingIcon from '@mui/icons-material/Pending';
-import ScheduleSendIcon from '@mui/icons-material/ScheduleSend';
-import { BsFillSendCheckFill } from 'react-icons/bs';
-import { BsFillSendDashFill } from 'react-icons/bs';
-import { BsFillSendExclamationFill } from 'react-icons/bs';
-import { BsFillSendXFill } from 'react-icons/bs';
 
 const StatusChip: FC<{
   status: InvitationStatus;

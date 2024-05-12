@@ -1,14 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Apitypes } from 'types';
-import api from './api';
-import { User } from 'types/userTypes';
 import {
   Community,
   CommunityForList,
-  CommunityInvitation,
   CreateCommunityFormInput,
-  InviteNewUserFormInput,
 } from 'routes/community/types/communityTypes';
+import { Apitypes } from 'types';
+import api from './api';
 
 const baseUrl = 'v1/communities';
 

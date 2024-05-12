@@ -8,7 +8,6 @@ import { ReactElement } from 'react';
 import { useIntl } from 'react-intl';
 import { Link as RouterLink } from 'react-router-dom';
 import useBreadcrumbs from 'use-react-router-breadcrumbs';
-import { getTranslationKeyByOrganizationType } from 'utils/translation';
 
 const UUID_REGEX_PATTERN = /^\w{8}\s\w{4}\s\w{4}\s\w{4}\s\w{12}$/;
 
@@ -47,10 +46,7 @@ const BreadcrumbsComponent = () => {
           linkText = refNumbers ? refNumbers[uuid] ?? '...' : '...';
         } else {
           // Check if the route translation changes according to organization type
-          const text = getTranslationKeyByOrganizationType({
-            key: camelCase(defaultLinkText),
-            type: '',
-          });
+          const text = '';
 
           if (text) {
             linkText = intl.formatMessage({

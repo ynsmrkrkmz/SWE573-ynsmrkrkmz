@@ -35,6 +35,8 @@
     "axios": "1.6.8",
     "date-fns": "^2.29.2",
     "js-cookie": "^3.0.1",
+    "json-schema-to-zod": "^2.1.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mui-markdown": "^1.1.13",
     "mui-tiptap": "^1.8.7",

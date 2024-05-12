@@ -78,3 +78,11 @@ export type BaseEntity = {
   updatedAt?: string;
   deleted: boolean;
 };
+
+export enum FieldTypes {
+  OBJECT = 'object',
+  STRING = 'string',
+  ARRAY = 'array',
+  INTEGER = 'integer',
+  TEXTAREA = 'textarea',
+}
