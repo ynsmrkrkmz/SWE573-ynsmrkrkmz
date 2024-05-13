@@ -1,4 +1,4 @@
-import { PostTemplateField } from 'routes/community/types/communityTypes';
+import { PostTemplateField } from 'routes/community/types/postTypes';
 import { FieldTypes } from 'types';
 import { AnyZodObject, z, ZodObject, ZodSchema } from 'zod';
 

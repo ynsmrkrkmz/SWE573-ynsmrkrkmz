@@ -10,7 +10,7 @@ type Props = PostTemplateField & {
   index: number;
 };
 
-const NewPostForm: FC<Props> = ({ fieldName, fieldType, isLoading, index }) => {
+const PostField: FC<Props> = ({ fieldName, fieldType, isLoading, index }) => {
   const {
     control,
     formState: { errors },
@@ -44,4 +44,4 @@ const NewPostForm: FC<Props> = ({ fieldName, fieldType, isLoading, index }) => {
   );
 };
 
-export { NewPostForm };
+export { PostField };

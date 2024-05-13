@@ -8,7 +8,7 @@ import { MdInfo } from 'react-icons/md';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCommunityContext } from 'routes/community/contexts/CommunityContext';
-import { PostTemplateField } from 'routes/community/types/communityTypes';
+import { PostTemplateField, defaultPostTemplate } from 'routes/community/types/postTypes';
 import { useInviteUser } from 'services/invitationService';
 import { FieldTypes } from 'types';
 import { UserCommunityRole } from 'types/userTypes';
@@ -28,14 +28,6 @@ const CommunityNewPost: FC = () => {
   const { communityId } = useParams();
   const { authCommunityUser } = useCommunityContext();
   const [selectedPostTemplate, setSelectedPostTemplate] = useState(0);
-
-  const defaultPostTemplate: PostTemplateField[] = [
-    {
-      fieldName: 'İçerik',
-      fieldType: FieldTypes.TEXTAREA,
-      required: true,
-    },
-  ];
 
   let postTemplates: { id?: number; title: string; template: PostTemplateField[] }[] = [
     {
