@@ -18,10 +18,6 @@ RUN mvn -B package -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine AS final
 
-ARG SPRING_PROFILE=dev
-
-ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILE
-
 # Set the working directory in the container
 WORKDIR /app
 
