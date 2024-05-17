@@ -26,24 +26,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AppBar } from './Header.style';
 import { Link as MuiLink } from '@mui/material';
 import { BsSendArrowDownFill } from 'react-icons/bs';
+import { stringAvatar } from 'utils/generateAvatarFromName';
 
 const Header: FC = () => {
   const intl = useIntl();
   const theme = useTheme();
   const { user, signOut } = useAuthContext();
-  const { language, setLanguage } = useAppContext();
   const matches = useMediaQuery(theme.breakpoints.up('xl'));
   const [open, setOpen] = React.useState(matches);
-  const [randomPicture, setRandomPicture] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const gender = ['women', 'men'][getRandomInt(0, 2)];
-    const index = getRandomInt(1, 100);
-    setRandomPicture(`https://randomuser.me/api/portraits/${gender}/${index}.jpg`);
-  }, []);
 
   useEffect(() => {
     setOpen(matches);
@@ -67,7 +60,7 @@ const Header: FC = () => {
         <Box flexGrow={1} justifyContent={'space-between'}></Box>
 
         <Stack spacing={1} direction="row" sx={{ mr: 3 }}>
-          <Tooltip title={intl.formatMessage({ id: 'generic.help' })}>
+          {/* <Tooltip title={intl.formatMessage({ id: 'generic.help' })}>
             <IconButton component={Link} to="/help">
               <HelpIcon color="action" />
             </IconButton>
@@ -79,11 +72,11 @@ const Header: FC = () => {
                 <NotificationsIcon color="action" />
               </Badge>
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <Divider orientation="vertical" flexItem />
           {user && (
-            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-              <Avatar sx={{ width: '32px', height: '32px', mx: 1 }} src={randomPicture} />
+            <Stack spacing={1} direction={'row'} alignItems={'center'}>
+              <Avatar alt="User Avatar" {...stringAvatar(`${user.name} ${user.lastname}`)} />
 
               <Typography>
                 {user?.name} {user?.lastname}
@@ -125,7 +118,7 @@ const Header: FC = () => {
                   {intl.formatMessage({ id: 'generic.signOut' })}
                 </MenuItem>
               </Menu>
-            </Box>
+            </Stack>
           )}
         </Stack>
       </Toolbar>
