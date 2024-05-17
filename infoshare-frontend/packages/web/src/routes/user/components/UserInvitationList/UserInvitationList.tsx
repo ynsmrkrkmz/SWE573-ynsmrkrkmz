@@ -5,27 +5,22 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams,
 } from '@mui/x-data-grid';
+import { useQueryClient } from '@tanstack/react-query';
+import ConfirmationDialog from 'components/ComfirmationDialog';
 import { StatusChip } from 'components/StatusChip';
-import { useAppContext } from 'contexts/AppContext';
+import useNotification from 'hooks/useNotification';
 import { FC, useCallback, useMemo, useState } from 'react';
-import { MdOutlineCancel } from 'react-icons/md';
+import { MdOutlineCancel, MdOutlineCheckCircle } from 'react-icons/md';
 import { useIntl } from 'react-intl';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useCommunityContext } from 'routes/community/contexts/CommunityContext';
 import { InvitationStatus } from 'routes/community/types/communityTypes';
-import Root, { StyledDataGrid } from './UserInvitationList.style';
 import {
   useAcceptInvitation,
-  useCancelInvitation,
-  useGetCommunityInvitations,
   useGetUserInvitations,
   useRejctInvitation,
 } from 'services/invitationService';
-import ConfirmationDialog from 'components/ComfirmationDialog';
-import { useQueryClient } from '@tanstack/react-query';
-import useNotification from 'hooks/useNotification';
-import { useCommunityContext } from 'routes/community/contexts/CommunityContext';
-import { UserCommunityRole } from 'types/userTypes';
-import { MdOutlineCheckCircle } from 'react-icons/md';
+import Root, { StyledDataGrid } from './UserInvitationList.style';
 
 const UserInvitationList: FC = () => {
   const intl = useIntl();
@@ -169,12 +164,14 @@ const UserInvitationList: FC = () => {
         width: 80,
         getActions: (params) => [
           <GridActionsCellItem
+            key={params.id}
             icon={<MdOutlineCheckCircle style={{ fontSize: '24px' }} />}
             label={intl.formatMessage({ id: 'generic.accept' })}
             onClick={() => acceptInvitation(params.id as string)}
             showInMenu
           />,
           <GridActionsCellItem
+            key={params.id}
             icon={<MdOutlineCancel style={{ fontSize: '24px' }} />}
             label={intl.formatMessage({ id: 'generic.reject' })}
             onClick={handleDialogOpen(params.id as string)}
@@ -183,12 +180,8 @@ const UserInvitationList: FC = () => {
         ],
       },
     ],
-    [intl]
+    [acceptInvitation, getDate, intl]
   );
-
-  function getInvitedUserFullName(params: GridValueGetterParams) {
-    return `${params.row.username || ''} ${params.row.userLastName || ''}`;
-  }
 
   function getInvitorFullName(params: GridValueGetterParams) {
     return `${params.row.sentByName || ''} ${params.row.sentByLastname || ''}`;

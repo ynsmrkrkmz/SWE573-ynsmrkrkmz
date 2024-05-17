@@ -101,7 +101,18 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>spring-cloud-gcp-starter-sql-postgresql</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.hypersistence</groupId>
+            <artifactId>hypersistence-utils-hibernate-62</artifactId>
+            <version>3.7.5</version>
+        </dependency>
+
+    </dependencies>
 
 	<build>
 		<plugins>

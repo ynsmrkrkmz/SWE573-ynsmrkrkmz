@@ -1,7 +1,9 @@
 package com.swe573.infoshare.model;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Where;
 
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -34,10 +36,12 @@ public class Invitation extends BaseEntity {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "user_community_role", columnDefinition = "user_community_role", nullable = false)
+    @Type(PostgreSQLEnumType.class)
     private UserCommunityRole userCommunityRole = UserCommunityRole.MEMBER;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "invitation_status", columnDefinition = "invitation_status", nullable = false)
+    @Type(PostgreSQLEnumType.class)
     private InvitationStatus invitationStatus = InvitationStatus.PENDING;
 }
