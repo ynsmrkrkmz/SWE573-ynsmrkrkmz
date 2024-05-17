@@ -98,7 +98,7 @@ const CommunityUsers: FC = () => {
         <Collapse in={ownersOpen} timeout="auto" unmountOnExit>
           {owners &&
             owners.map((u) => (
-              <ListItem divider>
+              <ListItem key={u.id} divider>
                 <ListItemAvatar></ListItemAvatar>
                 <ListItemText primary={`${u.name} ${u.lastname}`} />
               </ListItem>
@@ -117,6 +117,7 @@ const CommunityUsers: FC = () => {
           {moderators &&
             moderators.map((u) => (
               <ListItem
+                key={u.id}
                 divider
                 secondaryAction={
                   authCommunityUser?.userCommunityRole === UserCommunityRole.OWNER ? (
@@ -149,6 +150,7 @@ const CommunityUsers: FC = () => {
           {members &&
             members.map((u) => (
               <ListItem
+                key={u.id}
                 divider
                 secondaryAction={
                   authCommunityUser?.userCommunityRole === UserCommunityRole.OWNER ||

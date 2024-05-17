@@ -1,6 +1,6 @@
-import { PostTemplateField } from 'routes/community/types/communityTypes';
+import { PostTemplateField } from 'routes/community/types/postTypes';
 import { FieldTypes } from 'types';
-import { AnyZodObject, z, ZodObject, ZodSchema } from 'zod';
+import { z, ZodSchema } from 'zod';
 
 export const generatePostZodSchema = (input: PostTemplateField[]) => {
   let fields: { [key: string]: ZodSchema } = {

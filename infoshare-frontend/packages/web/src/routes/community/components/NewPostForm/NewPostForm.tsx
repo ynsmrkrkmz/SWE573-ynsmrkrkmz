@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import TextFieldElement from 'components/FormComponents/TextFieldElement';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { PostTemplateField } from 'routes/community/types/communityTypes';
+import { PostTemplateField } from 'routes/community/types/postTypes';
 import { FieldTypes } from 'types';
 
 type Props = PostTemplateField & {
