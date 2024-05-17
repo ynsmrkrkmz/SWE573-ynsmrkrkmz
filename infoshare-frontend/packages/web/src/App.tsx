@@ -10,11 +10,11 @@ import DefaultLayout from 'layouts/DefaultLayout';
 import PropTypes from 'prop-types';
 import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import GlobalStyles, { AppLoaderWrapper } from './App.style';
+import CommunityRoute from 'routes/community';
 import LoginRoute from 'routes/login';
 import SignupRoute from 'routes/signup';
-import CommunityRoute from 'routes/community';
 import { UserRoute } from 'routes/user';
+import GlobalStyles, { AppLoaderWrapper } from './App.style';
 
 const App: FC = () => {
   const { isLoading } = useAuthContext();
@@ -48,9 +48,9 @@ const App: FC = () => {
             <Route path="/sign-up" element={<SignupRoute />} />
           </Route>
 
-          <Route element={<AgreementsLayout />}>
-            {/* <Route path="/notifications/*" element={<Notifications />} /> */}
-          </Route>
+          {/* <Route element={<AgreementsLayout />}> */}
+          {/* <Route path="/notifications/*" element={<Notifications />} /> */}
+          {/* </Route> */}
 
           {/* No Layout */}
           {/* <Route path="/not-found" element={<Http404Page />} />

@@ -1,5 +1,8 @@
 package com.swe573.infoshare.model;
 
+import org.hibernate.annotations.Type;
+
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -30,5 +33,6 @@ public class CommunityUser extends BaseEntity {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "user_community_role", columnDefinition = "user_community_role", nullable = false)
+    @Type(PostgreSQLEnumType.class)
     private UserCommunityRole userCommunityRole = UserCommunityRole.MEMBER;
 }

@@ -3,9 +3,13 @@ package com.swe573.infoshare.model;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +33,7 @@ public class User implements UserDetails {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "role", columnDefinition = "user_role", nullable = false)
+    @Type(PostgreSQLEnumType.class)
     private Role role = Role.USER;
 
     public User() {

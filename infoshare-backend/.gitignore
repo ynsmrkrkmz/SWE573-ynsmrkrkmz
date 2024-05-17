@@ -33,4 +33,5 @@ build/
 .vscode/
 
 ### Dev Properties ###
-/src/main/**/env.properties
+/src/main/resources/env.properties
+/src/main/resources/infoshare-423320-114d1d0743f4.json
