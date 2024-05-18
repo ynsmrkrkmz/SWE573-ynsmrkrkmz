@@ -82,5 +82,16 @@
   "error.fieldCantBeBlank": "Alan boş olamaz",
   "post.submit": "Gönderiyi yayınla",
   "error.titleCantBeBlank": "Başlık boş olamaz",
-  "success.postSubmitted": "Gönderi başarıyla yayınlandı"
+  "success.postSubmitted": "Gönderi başarıyla yayınlandı",
+  "post.newTemplate": "Yeni Gönderi Şablonu",
+  "post.templateTitle": "Şablon Başlığı",
+  "post.fieldName": "Alan Adı",
+  "post.fieldType": "Alan Tipi",
+  "post.createTemplate": "Şablon Oluştur",
+  "post.addNewField": "Yeni Alan Ekle",
+  "post.required": "Gerekli Alan",
+  "error.fieldNameCantBeBlank": "Alan adı boş olamaz",
+  "success.postTemplatedCreated": "Şablon başarıyla oluşturuldu",
+  "error.incalidUrl": "Geçersiz Url",
+  "error.invalidDatetime": "Geçersiz Tarih saat"
 }

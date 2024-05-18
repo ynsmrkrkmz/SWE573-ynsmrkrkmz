@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.swe573.infoshare.handler.ResponseHandler;
 import com.swe573.infoshare.model.User;
 import com.swe573.infoshare.request.post.NewPostRequest;
+import com.swe573.infoshare.request.post.NewTemplateRequest;
 import com.swe573.infoshare.response.PostListResponse;
 import com.swe573.infoshare.service.PostService;
 
@@ -46,6 +47,16 @@ public class PostController {
 
         return ResponseHandler.generateResponse("Community posts have been listed successfully", HttpStatus.OK,
                 posts);
+    }
+
+    @PostMapping("new-template")
+    public ResponseEntity<Object> createNewPostTemplate(@AuthenticationPrincipal User user,
+            @RequestBody NewTemplateRequest request) {
+
+        postService.createNewPostTemplate(user, request);
+
+        return ResponseHandler.generateResponse("Post template is created successfully", HttpStatus.OK,
+                null);
     }
 
 }

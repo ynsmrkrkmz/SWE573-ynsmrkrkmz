@@ -1,0 +1,1 @@
+export { CommunityNewTemplate } from './CommunityNewTemplate';

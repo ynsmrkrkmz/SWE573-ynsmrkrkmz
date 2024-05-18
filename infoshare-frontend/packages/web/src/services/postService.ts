@@ -1,7 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Apitypes } from 'types';
 import api from './api';
-import { NewPostFormInput, PostDetails } from 'routes/community/types/postTypes';
+import {
+  NewPostFormInput,
+  NewTemplateRequest,
+  PostDetails,
+} from 'routes/community/types/postTypes';
 
 const baseUrl = 'v1/posts';
 
@@ -29,5 +33,19 @@ export const useGetCommunityPosts = (communityId: string | undefined, enabled = 
     },
     {
       enabled,
+    }
+  );
+
+export const useCreateTemplate = (options = {}) =>
+  useMutation(
+    async (data: NewTemplateRequest) => {
+      return api.fetch({
+        method: Apitypes.POST,
+        url: `${baseUrl}/new-template`,
+        data,
+      });
+    },
+    {
+      ...options,
     }
   );

@@ -113,13 +113,6 @@ const CommunityDetailsRoot: FC = () => {
         (authCommunityUser && authCommunityUser.userCommunityRole !== UserCommunityRole.MEMBER) ??
         false,
     },
-    {
-      label: 'community.settings',
-      link: 'settings',
-      visible:
-        (authCommunityUser && authCommunityUser.userCommunityRole !== UserCommunityRole.MEMBER) ??
-        false,
-    },
   ];
 
   return isLoading ? (
