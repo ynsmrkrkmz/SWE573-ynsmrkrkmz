@@ -91,5 +91,7 @@
   "post.addNewField": "Yeni Alan Ekle",
   "post.required": "Gerekli Alan",
   "error.fieldNameCantBeBlank": "Alan adı boş olamaz",
-  "success.postTemplatedCreated": "Şablon başarıyla oluşturuldu "
+  "success.postTemplatedCreated": "Şablon başarıyla oluşturuldu",
+  "error.incalidUrl": "Geçersiz Url",
+  "error.invalidDatetime": "Geçersiz Tarih saat"
 }

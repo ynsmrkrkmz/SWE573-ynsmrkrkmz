@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import NumberFieldElement from 'components/FormComponents/NumberFieldElement';
 import TextFieldElement from 'components/FormComponents/TextFieldElement';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -13,13 +14,11 @@ type Props = PostTemplateField & {
 const NewPostForm: FC<Props> = ({ fieldName, fieldType, isLoading, index }) => {
   const { control } = useFormContext();
 
-  if (fieldType === FieldTypes.TEXTAREA)
+  if (fieldType === FieldTypes.INTEGER)
     return (
       <Grid item xs={12}>
-        <TextFieldElement
+        <NumberFieldElement
           fullWidth
-          multiline
-          minRows={5}
           label={fieldName}
           disabled={isLoading}
           control={control}
@@ -32,6 +31,7 @@ const NewPostForm: FC<Props> = ({ fieldName, fieldType, isLoading, index }) => {
     <Grid item xs={12}>
       <TextFieldElement
         fullWidth
+        multiline
         label={fieldName}
         disabled={isLoading}
         control={control}

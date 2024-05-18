@@ -23,7 +23,15 @@ export type PostDetails = {
 
 const PostTemplateFieldSchema = z.object({
   fieldName: z.string().min(1, { message: 'error.fieldNameCantBeBlank' }),
-  fieldType: z.enum([FieldTypes.INTEGER, FieldTypes.STRING, FieldTypes.TEXTAREA]),
+  fieldType: z.enum([
+    FieldTypes.INTEGER,
+    FieldTypes.STRING,
+    FieldTypes.BOOLEAN,
+    FieldTypes.FLOAT,
+    FieldTypes.DATETIME,
+    FieldTypes.LOCATION,
+    FieldTypes.URL,
+  ]),
   required: z.boolean(),
 });
 
@@ -32,7 +40,7 @@ export type PostTemplateField = z.infer<typeof PostTemplateFieldSchema>;
 export const defaultPostTemplate: PostTemplateField[] = [
   {
     fieldName: 'İçerik',
-    fieldType: FieldTypes.TEXTAREA,
+    fieldType: FieldTypes.STRING,
     required: true,
   },
 ];

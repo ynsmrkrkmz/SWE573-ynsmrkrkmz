@@ -80,9 +80,11 @@ export type BaseEntity = {
 };
 
 export enum FieldTypes {
-  OBJECT = 'object',
   STRING = 'string',
-  ARRAY = 'array',
   INTEGER = 'integer',
-  TEXTAREA = 'textarea',
+  FLOAT = 'float',
+  LOCATION = 'location',
+  DATETIME = 'datetime',
+  BOOLEAN = 'boolean',
+  URL = 'url',
 }

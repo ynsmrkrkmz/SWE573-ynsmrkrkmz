@@ -1,14 +1,12 @@
-import { DeleteOutline } from '@mui/icons-material';
-import { Box, FormLabel, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import { CheckboxElement } from 'components/FormComponents/CheckBoxElement';
 import SelectElement from 'components/FormComponents/SelectElement';
 import TextFieldElement from 'components/FormComponents/TextFieldElement';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useIntl } from 'react-intl';
-import { PostTemplateField } from 'routes/community/types/postTypes';
-import { FieldTypes } from 'types';
 import { MdDelete } from 'react-icons/md';
+import { useIntl } from 'react-intl';
+import { FieldTypes } from 'types';
 
 type Props = {
   index: number;
@@ -21,20 +19,10 @@ const TemplateField: FC<Props> = ({ index, isLoading, onDeleteClick }) => {
   const theme = useTheme();
   const { control } = useFormContext();
 
-  const options = [
-    {
-      label: FieldTypes.INTEGER,
-      value: FieldTypes.INTEGER,
-    },
-    {
-      label: FieldTypes.STRING,
-      value: FieldTypes.STRING,
-    },
-    {
-      label: FieldTypes.TEXTAREA,
-      value: FieldTypes.TEXTAREA,
-    },
-  ];
+  const options = Object.keys(FieldTypes).map((key) => ({
+    label: key,
+    value: FieldTypes[key as keyof typeof FieldTypes],
+  }));
 
   return (
     <Grid item xs={12}>
