@@ -1,24 +1,25 @@
+import AddIcon from '@mui/icons-material/Add';
 import { LoadingButton } from '@mui/lab';
-import { FormControl, Grid, IconButton, MenuItem, TextField, Typography } from '@mui/material';
+import { Button, FormControl, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import useFormResolver from 'hooks/useFormResolver';
 import useNotification from 'hooks/useNotification';
+import omit from 'lodash/omit';
 import { FC, useCallback, useState } from 'react';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { MdInfo } from 'react-icons/md';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useCommunityContext } from 'routes/community/contexts/CommunityContext';
-import { PostTemplateField, defaultPostTemplate } from 'routes/community/types/postTypes';
-import { useInviteUser } from 'services/invitationService';
-import { FieldTypes } from 'types';
-import { UserCommunityRole } from 'types/userTypes';
-import { generatePostZodSchema } from 'utils/generatePostZodSchema';
-import Root from './CommunityNewPost.style';
-import { z } from 'zod';
 import { NewPostForm } from 'routes/community/components/NewPostForm';
+import { useCommunityContext } from 'routes/community/contexts/CommunityContext';
+import {
+  defaultPostTemplate,
+  NewPostFormInput,
+  PostTemplate,
+  PostTemplateField,
+} from 'routes/community/types/postTypes';
 import { useSubmitPost } from 'services/postService';
-import { NewPostFormInput } from 'routes/community/types/postTypes';
-import omit from 'lodash/omit';
+import { generatePostZodSchema } from 'utils/generatePostZodSchema';
+import { z } from 'zod';
+import Root from './CommunityNewPost.style';
 
 const CommunityNewPost: FC = () => {
   const intl = useIntl();
@@ -26,10 +27,9 @@ const CommunityNewPost: FC = () => {
   const navigate = useNavigate();
   const { showSuccess } = useNotification();
   const { communityId } = useParams();
-  const { authCommunityUser } = useCommunityContext();
   const [selectedPostTemplate, setSelectedPostTemplate] = useState(0);
 
-  let postTemplates: { id?: number; title: string; template: PostTemplateField[] }[] = [
+  let postTemplates: PostTemplate[] = [
     {
       title: 'Varsayılan Post',
       template: defaultPostTemplate,
@@ -70,19 +70,25 @@ const CommunityNewPost: FC = () => {
 
       submitPost(postData);
     },
-    [selectedPostTemplate]
+    [communityId, submitPost]
   );
+
+  const handleNewTemplate = () => {
+    navigate('../posts/new-template');
+  };
 
   return (
     <Root>
-      <Typography variant={'h4'} color="primary" sx={{ flexGrow: 1 }}>
-        {intl.formatMessage({
-          id: 'post.new',
-        })}
-        <IconButton size="small" sx={{ padding: 0, ml: 1, mb: 0.25 }}>
-          <MdInfo color="#D8D9DC" />
-        </IconButton>
-      </Typography>
+      <Stack direction={'row'}>
+        <Typography variant={'h4'} color="primary" sx={{ flexGrow: 1 }}>
+          {intl.formatMessage({
+            id: 'post.new',
+          })}
+        </Typography>
+        <Button variant="contained" onClick={handleNewTemplate} startIcon={<AddIcon />}>
+          <Typography>{intl.formatMessage({ id: 'post.newTemplate' })}</Typography>
+        </Button>
+      </Stack>
       <FormProvider {...useFormMethods}>
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <FormControl sx={{ display: 'flex' }} error={!!errors.email}>

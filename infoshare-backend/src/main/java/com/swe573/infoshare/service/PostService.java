@@ -6,16 +6,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.ScrollPosition.Direction;
 import org.springframework.stereotype.Service;
 
+import com.swe573.infoshare.exceptions.UnauthorizedActionException;
 import com.swe573.infoshare.model.Community;
 import com.swe573.infoshare.model.CommunityUser;
+import com.swe573.infoshare.model.CommunityUserId;
 import com.swe573.infoshare.model.Post;
 import com.swe573.infoshare.model.PostTemplate;
 import com.swe573.infoshare.model.User;
+import com.swe573.infoshare.model.UserCommunityRole;
 import com.swe573.infoshare.repository.CommunityRepository;
 import com.swe573.infoshare.repository.CommunityUserRepository;
 import com.swe573.infoshare.repository.PostRepository;
 import com.swe573.infoshare.repository.PostTemplateRepository;
 import com.swe573.infoshare.request.post.NewPostRequest;
+import com.swe573.infoshare.request.post.NewTemplateRequest;
 import com.swe573.infoshare.response.PostListResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -89,5 +93,22 @@ public class PostService {
                 .build()).toList();
 
         return postListResponses;
+    }
+
+    public void createNewPostTemplate(User user, NewTemplateRequest request) {
+        CommunityUser communityUser = communityUserRepository
+                .getReferenceById(new CommunityUserId(request.getCommunityId(), user.getId()));
+
+        if (communityUser.getUserCommunityRole() == UserCommunityRole.MEMBER)
+            throw new UnauthorizedActionException();
+
+        PostTemplate postTemplate = PostTemplate.builder()
+                .title(request.getTitle())
+                .template(request.getTemplate())
+                .createdBy(user)
+                .community(communityUser.getCommunity())
+                .build();
+
+        postTemplateRepository.save(postTemplate);
     }
 }

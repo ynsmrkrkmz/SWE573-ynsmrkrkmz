@@ -11,10 +11,7 @@ type Props = PostTemplateField & {
 };
 
 const NewPostForm: FC<Props> = ({ fieldName, fieldType, isLoading, index }) => {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
+  const { control } = useFormContext();
 
   if (fieldType === FieldTypes.TEXTAREA)
     return (

@@ -12,6 +12,7 @@ import { CommunityAbout } from './routes/CommunityAbout';
 import { CommunityNewInvitation } from './routes/CommunityNewInvitation';
 import { CommunityPosts } from './routes/CommunityPosts';
 import { CommunityNewPost } from './routes/CommunityNewPost';
+import { CommunityNewTemplate } from './routes/CommunityNewTemplate';
 
 const CommunityRoute: FC = () => {
   const { setPageName } = useAppContext();
@@ -31,6 +32,7 @@ const CommunityRoute: FC = () => {
           <Route path="about" element={<CommunityAbout />} />
           <Route path="posts" element={<CommunityPosts />} />
           <Route path="posts/new-post" element={<CommunityNewPost />} />
+          <Route path="posts/new-template" element={<CommunityNewTemplate />} />
           <Route path="members" element={<CommunityUsers />} />
           <Route path="invitations" element={<CommunityInvitations />} />
           <Route path="invitations/new-invitation" element={<CommunityNewInvitation />} />

@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 import React from 'react';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import { Control, Controller } from 'react-hook-form';

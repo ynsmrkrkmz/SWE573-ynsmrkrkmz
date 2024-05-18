@@ -37,7 +37,7 @@ const LeftMenu: FC = () => {
 
   return (
     <Root>
-      <Box sx={{ width: '100%', maxWidth: 360 }}>
+      <Box sx={{ minWidth: '256px', maxWidth: 360 }}>
         <List>
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigate('./communities/create-community')}>

@@ -1,4 +1,5 @@
 import { FieldTypes } from 'types';
+import { z } from 'zod';
 
 export type NewPostFormInput = {
   title: string;
@@ -20,11 +21,13 @@ export type PostDetails = {
   postTemplate: PostTemplateField[] | null;
 };
 
-export type PostTemplateField = {
-  fieldName: string;
-  fieldType: FieldTypes;
-  required: boolean;
-};
+const PostTemplateFieldSchema = z.object({
+  fieldName: z.string().min(1, { message: 'error.fieldNameCantBeBlank' }),
+  fieldType: z.enum([FieldTypes.INTEGER, FieldTypes.STRING, FieldTypes.TEXTAREA]),
+  required: z.boolean(),
+});
+
+export type PostTemplateField = z.infer<typeof PostTemplateFieldSchema>;
 
 export const defaultPostTemplate: PostTemplateField[] = [
   {
@@ -33,3 +36,22 @@ export const defaultPostTemplate: PostTemplateField[] = [
     required: true,
   },
 ];
+
+export const PostTemplateSchema = z.object({
+  title: z.string().min(1, { message: 'error.titleCantBeBlank' }),
+  template: z.array(PostTemplateFieldSchema).nonempty(),
+});
+
+export type Template = z.infer<typeof PostTemplateSchema>['template'][number];
+
+const PostTemplateOmitted = PostTemplateSchema.omit({ template: true });
+
+export type PostTemplate = z.infer<typeof PostTemplateOmitted> & {
+  template: Template[];
+};
+
+export type NewTemplateRequest = {
+  title: string;
+  template: string;
+  communityId: string;
+};
