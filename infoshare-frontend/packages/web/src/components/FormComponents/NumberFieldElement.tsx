@@ -28,7 +28,6 @@ export default function TextFieldElement({
             }
           }}
           type="number"
-          inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
           onBlur={onBlur}
           inputRef={ref}
           error={invalid}

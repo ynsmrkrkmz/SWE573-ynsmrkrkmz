@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import CommunityRoute from 'routes/community';
+import { HomeRoute } from 'routes/home';
 import LoginRoute from 'routes/login';
 import SignupRoute from 'routes/signup';
 import { UserRoute } from 'routes/user';
@@ -36,7 +37,7 @@ const App: FC = () => {
           {/* Default Layout */}
           <Route element={<RequireAuthentication />}>
             <Route element={<DefaultLayout />}>
-              <Route path="/*" element={<h3>default</h3>} />
+              <Route path="/*" element={<HomeRoute />} />
               <Route path="/communities/*" element={<CommunityRoute />} />
               <Route path="/user/*" element={<UserRoute />} />
             </Route>

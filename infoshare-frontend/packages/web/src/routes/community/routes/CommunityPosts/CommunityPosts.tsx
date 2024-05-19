@@ -42,10 +42,10 @@ const CommunityPosts: FC = () => {
         </Button>
       </Stack>
       <Divider />
-      <Box>
+      <Stack direction={'column'} spacing={1}>
         {postData &&
           postData.map((p) => <PostCard key={p.id} postDetails={omit(p, ['communityName'])} />)}
-      </Box>
+      </Stack>
     </>
   );
 };

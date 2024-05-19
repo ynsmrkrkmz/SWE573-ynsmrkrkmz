@@ -92,6 +92,9 @@
   "post.required": "Gerekli Alan",
   "error.fieldNameCantBeBlank": "Alan adı boş olamaz",
   "success.postTemplatedCreated": "Şablon başarıyla oluşturuldu",
-  "error.incalidUrl": "Geçersiz Url",
-  "error.invalidDatetime": "Geçersiz Tarih saat"
+  "error.invalidUrl": "Geçersiz Url",
+  "error.invalidDatetime": "Geçersiz Tarih saat",
+  "Required": "Gerekli Alan",
+  "info.imageFieldPlaceholder": "Resim Url Adresi",
+  "generic.home": "Anasayfa"
 }

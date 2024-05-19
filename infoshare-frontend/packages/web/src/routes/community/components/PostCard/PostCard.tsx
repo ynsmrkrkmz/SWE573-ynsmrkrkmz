@@ -1,20 +1,13 @@
-import { FC } from 'react';
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Grid,
-  Stack,
-  Typography,
-} from '@mui/material';
-import { useIntl } from 'react-intl';
+import { Avatar, Card, CardContent, CardHeader, Grid, Stack, Typography } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
+import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { PostDetails, defaultPostTemplate } from 'routes/community/types/postTypes';
+import {
+  defaultPostTemplate,
+  PostDetails,
+  PostTemplateField,
+} from 'routes/community/types/postTypes';
 import { stringAvatar } from 'utils/generateAvatarFromName';
 import { PostField } from '../PostField';
 
@@ -39,7 +32,9 @@ const PostCard: FC<Props> = ({ postDetails }) => {
     createdByName,
   } = postDetails;
 
-  const template = postTemplate ?? defaultPostTemplate;
+  const template: PostTemplateField[] = postTemplate
+    ? JSON.parse(postTemplate)
+    : defaultPostTemplate;
 
   const contentObj: { [key: string]: string } = JSON.parse(content);
 
@@ -47,7 +42,15 @@ const PostCard: FC<Props> = ({ postDetails }) => {
     <Card>
       <CardHeader
         sx={{ padding: 2 }}
-        avatar={<Avatar alt="User Avatar" {...stringAvatar(communityName ?? createdByName)} />}
+        avatar={
+          communityName ? (
+            <Avatar sx={{ bgcolor: deepOrange[500] }} alt="Community Image">
+              C
+            </Avatar>
+          ) : (
+            <Avatar alt="User Avatar" {...stringAvatar(communityName ?? createdByName)} />
+          )
+        }
         title={
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <Typography variant="h3" fontSize={16}>
@@ -65,16 +68,21 @@ const PostCard: FC<Props> = ({ postDetails }) => {
           </Stack>
         }
         subheader={
-          <Typography variant="body2" fontSize={8}>
+          <Typography variant="body1" fontSize={12}>
             {communityName && createdByName}
           </Typography>
         }
       />
       <CardContent>
         <Grid container spacing={2} columns={{ xs: 6, sm: 6, md: 12 }}>
+          <Grid item xs={12}>
+            <Typography variant="h1" whiteSpace="pre-wrap">
+              {title}
+            </Typography>
+          </Grid>
           {template.map((t, index) => {
             return (
-              <PostField key={index} fieldTemplate={t} content={Object.values(contentObj)[index]} />
+              <PostField key={t.fieldName} fieldTemplate={t} content={contentObj} index={index} />
             );
           })}
         </Grid>

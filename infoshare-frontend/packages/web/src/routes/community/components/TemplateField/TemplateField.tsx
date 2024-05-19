@@ -27,7 +27,6 @@ const TemplateField: FC<Props> = ({ index, isLoading, onDeleteClick }) => {
   return (
     <Grid item xs={12}>
       <Box borderRadius={2} component="fieldset">
-        {/* <legend>{''}</legend> */}
         <Grid container spacing={2} columns={{ xs: 6, sm: 6, md: 12 }}>
           <Grid item xs={6}>
             <TextFieldElement
