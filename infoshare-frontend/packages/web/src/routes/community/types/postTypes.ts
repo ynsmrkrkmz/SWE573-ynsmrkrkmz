@@ -18,7 +18,7 @@ export type PostDetails = {
   createdById: number;
   createdByName: string;
   createdAt: string;
-  postTemplate: PostTemplateField[] | null;
+  postTemplate: string | null;
 };
 
 const PostTemplateFieldSchema = z.object({
@@ -31,6 +31,7 @@ const PostTemplateFieldSchema = z.object({
     FieldTypes.DATETIME,
     FieldTypes.LOCATION,
     FieldTypes.URL,
+    FieldTypes.IMAGE,
   ]),
   required: z.boolean(),
 });
@@ -55,6 +56,7 @@ export type Template = z.infer<typeof PostTemplateSchema>['template'][number];
 const PostTemplateOmitted = PostTemplateSchema.omit({ template: true });
 
 export type PostTemplate = z.infer<typeof PostTemplateOmitted> & {
+  id: number;
   template: Template[];
 };
 
@@ -62,4 +64,10 @@ export type NewTemplateRequest = {
   title: string;
   template: string;
   communityId: string;
+};
+
+export type PostTemplateResponse = {
+  id: number;
+  title: string;
+  template: string;
 };

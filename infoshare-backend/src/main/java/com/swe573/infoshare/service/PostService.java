@@ -21,6 +21,7 @@ import com.swe573.infoshare.repository.PostTemplateRepository;
 import com.swe573.infoshare.request.post.NewPostRequest;
 import com.swe573.infoshare.request.post.NewTemplateRequest;
 import com.swe573.infoshare.response.PostListResponse;
+import com.swe573.infoshare.response.PostTemplateResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -57,7 +58,7 @@ public class PostService {
         Community community = communityRepository.getReferenceById(communityId);
 
         List<Post> posts = postRepository.findAllByCommunityAndDeletedOrderByCreatedAtDesc(community, false);
-        List<PostListResponse> postListResponses = posts.stream().map(p -> PostListResponse.builder()
+        return posts.stream().map(p -> PostListResponse.builder()
                 .id(p.getId())
                 .title(p.getTitle())
                 .content(p.getContent())
@@ -68,8 +69,6 @@ public class PostService {
                 .createdAt(p.getCreatedAt())
                 .postTemplate(p.getPostTemplate() != null ? p.getPostTemplate().getTemplate() : null)
                 .build()).toList();
-
-        return postListResponses;
     }
 
     public List<PostListResponse> getAllUserPosts(User user) {
@@ -80,7 +79,7 @@ public class PostService {
 
         List<Post> posts = postRepository.findAllByCommunityInAndDeletedOrderByCreatedAtDesc(communities, false);
 
-        List<PostListResponse> postListResponses = posts.stream().map(p -> PostListResponse.builder()
+        return posts.stream().map(p -> PostListResponse.builder()
                 .id(p.getId())
                 .title(p.getTitle())
                 .content(p.getContent())
@@ -91,8 +90,6 @@ public class PostService {
                 .createdAt(p.getCreatedAt())
                 .postTemplate(p.getPostTemplate() != null ? p.getPostTemplate().getTemplate() : null)
                 .build()).toList();
-
-        return postListResponses;
     }
 
     public void createNewPostTemplate(User user, NewTemplateRequest request) {
@@ -110,5 +107,17 @@ public class PostService {
                 .build();
 
         postTemplateRepository.save(postTemplate);
+    }
+
+    public List<PostTemplateResponse> getAllCommunityTemplates(Long communityId) {
+        Community community = communityRepository.getReferenceById(communityId);
+
+        List<PostTemplate> postTemplates = postTemplateRepository.findAllByCommunityAndDeleted(community, false);
+
+        return postTemplates.stream().map(t -> PostTemplateResponse.builder()
+                .id(t.getId())
+                .title(t.getTitle())
+                .template(t.getTemplate())
+                .build()).toList();
     }
 }

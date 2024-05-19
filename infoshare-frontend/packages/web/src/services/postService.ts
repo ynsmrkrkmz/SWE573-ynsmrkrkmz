@@ -5,6 +5,8 @@ import {
   NewPostFormInput,
   NewTemplateRequest,
   PostDetails,
+  PostTemplate,
+  PostTemplateResponse,
 } from 'routes/community/types/postTypes';
 
 const baseUrl = 'v1/posts';
@@ -36,6 +38,19 @@ export const useGetCommunityPosts = (communityId: string | undefined, enabled = 
     }
   );
 
+export const useGetUserCommunityPosts = (enabled = true) =>
+  useQuery(
+    ['user-community-posts'],
+    async () => {
+      return api.fetch<PostDetails[]>({
+        url: `${baseUrl}`,
+      });
+    },
+    {
+      enabled,
+    }
+  );
+
 export const useCreateTemplate = (options = {}) =>
   useMutation(
     async (data: NewTemplateRequest) => {
@@ -47,5 +62,18 @@ export const useCreateTemplate = (options = {}) =>
     },
     {
       ...options,
+    }
+  );
+
+export const useGetCommunityTemplates = (communityId: string | undefined, enabled = true) =>
+  useQuery(
+    ['community-templates', communityId],
+    async () => {
+      return api.fetch<PostTemplateResponse[]>({
+        url: `${baseUrl}/templates?communityId=${communityId}`,
+      });
+    },
+    {
+      enabled,
     }
   );

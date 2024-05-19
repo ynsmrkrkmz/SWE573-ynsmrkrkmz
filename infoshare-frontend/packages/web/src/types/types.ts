@@ -87,4 +87,5 @@ export enum FieldTypes {
   DATETIME = 'datetime',
   BOOLEAN = 'boolean',
   URL = 'url',
+  IMAGE = 'image',
 }

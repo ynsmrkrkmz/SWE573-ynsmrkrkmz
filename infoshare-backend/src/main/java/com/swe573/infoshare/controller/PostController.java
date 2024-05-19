@@ -14,6 +14,7 @@ import com.swe573.infoshare.model.User;
 import com.swe573.infoshare.request.post.NewPostRequest;
 import com.swe573.infoshare.request.post.NewTemplateRequest;
 import com.swe573.infoshare.response.PostListResponse;
+import com.swe573.infoshare.response.PostTemplateResponse;
 import com.swe573.infoshare.service.PostService;
 
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,16 @@ public class PostController {
 
         return ResponseHandler.generateResponse("Community posts have been listed successfully", HttpStatus.OK,
                 posts);
+
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getCommunityUserPosts(@AuthenticationPrincipal User user) {
+
+        List<PostListResponse> posts = postService.getAllUserPosts(user);
+
+        return ResponseHandler.generateResponse("User Community posts  have been listed successfully", HttpStatus.OK,
+                posts);
     }
 
     @PostMapping("new-template")
@@ -59,4 +70,12 @@ public class PostController {
                 null);
     }
 
+    @GetMapping(path = "templates", params = { "communityId" })
+    public ResponseEntity<Object> getCommunityTemplates(@RequestParam("communityId") Long communityId) {
+
+        List<PostTemplateResponse> postTemplates = postService.getAllCommunityTemplates(communityId);
+
+        return ResponseHandler.generateResponse("Community templates have been listed successfully", HttpStatus.OK,
+                postTemplates);
+    }
 }

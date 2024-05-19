@@ -138,6 +138,7 @@ const CommunityInvitationList: FC = () => {
         width: 80,
         getActions: (params) => [
           <GridActionsCellItem
+            key={params.id}
             disabled={
               (params.row.invitationStatus as InvitationStatus) !== InvitationStatus.PENDING ||
               authCommunityUser?.userCommunityRole === UserCommunityRole.MEMBER ||
@@ -153,7 +154,7 @@ const CommunityInvitationList: FC = () => {
         ],
       },
     ],
-    [intl]
+    [authCommunityUser?.userCommunityRole, getDate, intl]
   );
 
   function getInvitedUserFullName(params: GridValueGetterParams) {

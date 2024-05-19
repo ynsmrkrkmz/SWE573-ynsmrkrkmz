@@ -9,6 +9,7 @@ const useFormResolver = () => {
     const errors: { [property: string]: { message: string } } = {};
 
     if (!result.success) {
+      console.log(result.error.issues);
       result.error.issues.reduce((acc: { [property: string]: { message: string } }, curr) => {
         acc[curr.path.join('.')] = {
           message: intl.formatMessage({ id: curr.message }),

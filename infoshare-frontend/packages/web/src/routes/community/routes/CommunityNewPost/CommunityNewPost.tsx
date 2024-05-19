@@ -4,7 +4,7 @@ import { Button, FormControl, Grid, MenuItem, Stack, TextField, Typography } fro
 import useFormResolver from 'hooks/useFormResolver';
 import useNotification from 'hooks/useNotification';
 import omit from 'lodash/omit';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -16,7 +16,7 @@ import {
   PostTemplate,
   PostTemplateField,
 } from 'routes/community/types/postTypes';
-import { useSubmitPost } from 'services/postService';
+import { useGetCommunityTemplates, useSubmitPost } from 'services/postService';
 import { generatePostZodSchema } from 'utils/generatePostZodSchema';
 import { z } from 'zod';
 import Root from './CommunityNewPost.style';
@@ -29,16 +29,36 @@ const CommunityNewPost: FC = () => {
   const { communityId } = useParams();
   const [selectedPostTemplate, setSelectedPostTemplate] = useState(0);
 
-  let postTemplates: PostTemplate[] = [
-    {
-      title: 'Varsayılan Post',
+  const { data } = useGetCommunityTemplates(communityId);
+
+  const postTemplates = useMemo(() => {
+    const defaultTemplate: PostTemplate = {
+      id: 0,
+      title: 'Varsayılan Gönderi',
       template: defaultPostTemplate,
-    },
-  ];
+    };
+    if (data?.data) {
+      let templates: PostTemplate[] = [];
 
-  const PostFormSchema = generatePostZodSchema(defaultPostTemplate);
+      data.data.reduce((acc: PostTemplate[], curr) => {
+        const template: PostTemplate = {
+          id: curr.id,
+          title: curr.title,
+          template: JSON.parse(curr.template),
+        };
 
-  console.log(PostFormSchema);
+        acc.push(template);
+
+        return acc;
+      }, templates);
+
+      return [defaultTemplate, ...templates];
+    }
+
+    return [defaultTemplate];
+  }, [data]);
+
+  const PostFormSchema = generatePostZodSchema(postTemplates[selectedPostTemplate].template);
 
   type PostForm = z.infer<typeof PostFormSchema>;
 
@@ -65,12 +85,12 @@ const CommunityNewPost: FC = () => {
         title: values.title,
         content: JSON.stringify(omit(values, ['title'])),
         communityId: communityId,
-        postTemplateId: null,
+        postTemplateId: selectedPostTemplate === 0 ? null : postTemplates[selectedPostTemplate].id,
       };
 
       submitPost(postData);
     },
-    [communityId, submitPost]
+    [communityId, postTemplates, selectedPostTemplate, submitPost]
   );
 
   const handleNewTemplate = () => {
@@ -91,7 +111,7 @@ const CommunityNewPost: FC = () => {
       </Stack>
       <FormProvider {...useFormMethods}>
         <form onSubmit={handleSubmit(onFormSubmit)}>
-          <FormControl sx={{ display: 'flex' }} error={!!errors.email}>
+          <FormControl sx={{ display: 'flex' }}>
             <Grid container spacing={2} columns={{ xs: 6, sm: 6, md: 12 }}>
               <Grid item xs={6}>
                 <TextField
@@ -117,7 +137,7 @@ const CommunityNewPost: FC = () => {
                   onChange={(e) => setSelectedPostTemplate(parseInt(e.target.value))}
                 >
                   {postTemplates.map((option, index) => (
-                    <MenuItem key={index} value={index}>
+                    <MenuItem key={option.id} value={index}>
                       {option.title}
                     </MenuItem>
                   ))}
@@ -125,7 +145,7 @@ const CommunityNewPost: FC = () => {
               </Grid>
               {postTemplates[selectedPostTemplate].template.map((t, i) => (
                 <NewPostForm
-                  key={i}
+                  key={t.fieldName}
                   fieldName={t.fieldName}
                   fieldType={t.fieldType}
                   required={t.required}

@@ -17,17 +17,18 @@ export const generatePostZodSchema = (input: PostTemplateField[]) => {
         acc[`field${index}`] = z.string().min(1, { message: 'error.fieldCantBeBlank' });
       else acc[`field${index}`] = z.string().optional();
     }
+
     if (curr.fieldType === FieldTypes.LOCATION) {
       if (curr.required) {
-        acc[`field${index}.lat`] = z.string().min(1, { message: 'error.fieldCantBeBlank' });
-        acc[`field${index}.long`] = z.string().min(1, { message: 'error.fieldCantBeBlank' });
+        acc[`field${index}lat`] = z.string().min(1, { message: 'error.fieldCantBeBlank' });
+        acc[`field${index}long`] = z.string().min(1, { message: 'error.fieldCantBeBlank' });
       } else {
-        acc[`field${index}.lat`] = z.string().optional();
-        acc[`field${index}.long`] = z.string().optional();
+        acc[`field${index}lat`] = z.string().optional();
+        acc[`field${index}long`] = z.string().optional();
       }
     }
 
-    if (curr.fieldType === FieldTypes.URL) {
+    if (curr.fieldType === FieldTypes.URL || curr.fieldType === FieldTypes.IMAGE) {
       if (curr.required)
         acc[`field${index}`] = z
           .string()
