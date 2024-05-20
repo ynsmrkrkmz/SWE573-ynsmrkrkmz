@@ -10,6 +10,7 @@ type AuthContextProps = {
   user: User | undefined;
   userClaims: any | undefined;
   isSignedIn: boolean;
+  isSigninLoading: boolean;
   isLoading: boolean;
   signIn: (props: LoginFormInput) => Promise<void>;
   signOut: () => Promise<void>;
@@ -19,6 +20,7 @@ const AuthContext = React.createContext<AuthContextProps>({
   user: undefined,
   userClaims: undefined,
   isSignedIn: false,
+  isSigninLoading: false,
   isLoading: true,
   signIn: () => {
     throw Error('not defined');
@@ -44,13 +46,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>();
   const [userClaims, setUserClaims] = useState<string[]>();
   const [isLoading, setIsLoading] = useState(true);
+  const [isSigninLoading, setSigninIsLoading] = useState(false);
   const [idToken, setIdToken] = useState<string | null>(null);
 
   const auth = useMemo(() => {
     const token = getAuth();
 
     return token;
-  }, [language, idToken]);
+  }, [idToken]);
 
   const { refetch: getUser } = useGetUser(false);
 
@@ -74,6 +77,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const signIn = useCallback(
     async ({ email, password }: LoginFormInput) => {
+      setSigninIsLoading(true);
       const { data } = await signInMutate({
         email,
         password,
@@ -87,6 +91,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           })
         );
       }
+      setSigninIsLoading(false);
       setToken(data.token);
       setIdToken(data.token);
     },
@@ -108,12 +113,13 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       userClaims,
       isSignedIn,
       isLoading,
+      isSigninLoading,
       signIn,
       signOut,
     };
 
     return values;
-  }, [user, userClaims, isSignedIn, isLoading, signIn, signOut]);
+  }, [user, userClaims, isSignedIn, isLoading, isSigninLoading, signIn, signOut]);
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };

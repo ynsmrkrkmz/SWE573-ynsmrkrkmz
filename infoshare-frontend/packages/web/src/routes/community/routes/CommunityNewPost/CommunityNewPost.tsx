@@ -29,7 +29,7 @@ const CommunityNewPost: FC = () => {
   const navigate = useNavigate();
   const { showSuccess } = useNotification();
   const { communityId } = useParams();
-  const { user } = useAuthContext();
+  const { authCommunityUser } = useCommunityContext();
   const [selectedPostTemplate, setSelectedPostTemplate] = useState(0);
 
   const { data } = useGetCommunityTemplates(communityId);
@@ -108,7 +108,7 @@ const CommunityNewPost: FC = () => {
             id: 'post.new',
           })}
         </Typography>
-        {user?.userCommunityRole === UserCommunityRole.OWNER ? (
+        {authCommunityUser?.userCommunityRole === UserCommunityRole.OWNER ? (
           <Button variant="contained" onClick={handleNewTemplate} startIcon={<AddIcon />}>
             <Typography>{intl.formatMessage({ id: 'post.newTemplate' })}</Typography>
           </Button>

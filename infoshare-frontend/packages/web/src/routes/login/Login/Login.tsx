@@ -1,41 +1,31 @@
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
-  Checkbox,
   Divider,
   FormControl,
-  FormControlLabel,
   Grid,
   Link,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton';
 import PasswordField from 'components/PasswordField';
-import { FC, useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
-import { useAppContext } from 'contexts/AppContext';
 import { useAuthContext } from 'contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import useFormResolver from 'hooks/useFormResolver';
+import { FC, useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 import { LoginFormInputSchema } from 'types/userTypes';
-import Root from './Login.style';
-import { useLogin } from 'services/userService';
-import useHandleError from 'hooks/useHandleError';
 
 const Login: FC = () => {
   const intl = useIntl();
-  const { language } = useAppContext();
-  const { signIn, isSignedIn, isLoading: isAuthLoading } = useAuthContext();
+  const { signIn, isSignedIn, isLoading: isAuthLoading, isSigninLoading } = useAuthContext();
   const navigate = useNavigate();
   const formResolver = useFormResolver();
-  const handleError = useHandleError();
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -46,10 +36,10 @@ const Login: FC = () => {
   });
 
   useEffect(() => {
-    if (isSignedIn && !isLoading && !isAuthLoading) {
+    if (isSignedIn && !isAuthLoading) {
       navigate('/');
     }
-  }, [isLoading, navigate, isSignedIn, isAuthLoading]);
+  }, [navigate, isSignedIn, isAuthLoading]);
 
   const onSubmit = async ({ email, password }: FieldValues) => {
     await signIn({ email, password });
@@ -76,7 +66,7 @@ const Login: FC = () => {
                   <TextField
                     id="email"
                     label={intl.formatMessage({ id: 'generic.email' })}
-                    disabled={isLoading}
+                    disabled={isSigninLoading}
                     error={!!errors.email}
                     inputProps={{
                       ...register('email'),
@@ -90,7 +80,7 @@ const Login: FC = () => {
                 <PasswordField
                   fullWidth
                   label={intl.formatMessage({ id: 'generic.password' })}
-                  disabled={isLoading}
+                  disabled={isSigninLoading}
                   error={!!errors.password}
                   inputProps={register('password')}
                   helperText={errors.password && `* ${errors.password.message}`}
@@ -99,8 +89,8 @@ const Login: FC = () => {
               <Grid item xs={12}>
                 <LoadingButton
                   fullWidth
-                  disabled={isLoading}
-                  loading={isLoading}
+                  disabled={isSigninLoading}
+                  loading={isSigninLoading}
                   variant="contained"
                   type="submit"
                   data-testid="sign-in-button"
