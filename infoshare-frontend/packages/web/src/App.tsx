@@ -19,7 +19,6 @@ import GlobalStyles, { AppLoaderWrapper } from './App.style';
 
 const App: FC = () => {
   const { isLoading } = useAuthContext();
-  document.body.style.overflow = 'hidden';
   return (
     <>
       <CssBaseline />

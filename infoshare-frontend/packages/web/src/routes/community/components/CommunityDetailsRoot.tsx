@@ -73,7 +73,7 @@ const CommunityDetailsRoot: FC = () => {
 
       setAuthCommunityUser(authCommunityUser);
     }
-  }, [setDescription, data]);
+  }, [setDescription, data, communityData, setCommunityUsers, setAuthCommunityUser, user?.id]);
 
   useEffect(() => {
     communityId && setCommunityId(communityId);

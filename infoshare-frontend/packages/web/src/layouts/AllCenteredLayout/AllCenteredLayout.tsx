@@ -7,7 +7,14 @@ import Root from './AllCenteredLayout.style';
 const AllCenteredLayout = () => {
   return (
     <Root>
-      <Grid container spacing={2} justifyContent="center" textAlign={'center'}>
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        textAlign={'center'}
+        overflow={'auto'}
+        maxHeight={'100vh'}
+      >
         <Grid item xs={12} sm={8} md={6} lg={4} xl={3}>
           <Typography marginBottom={'1.875rem'} variant={'h1'} color="primary" align="center">
             Infoshare

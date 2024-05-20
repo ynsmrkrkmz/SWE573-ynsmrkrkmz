@@ -1,4 +1,5 @@
-FROM node:lts-alpine AS build-stage
+# Stage 1: Build
+FROM node:20.13.1 AS build
 
 WORKDIR /app
 
@@ -13,24 +14,23 @@ ENV REACT_APP_API_URL=https://infoshare-backend-vh5r3eqwyq-uc.a.run.app/api
 # Copy required files
 COPY . .
 
-# Delete .env file to prevent unexpected issues
-RUN rm -rf packages/web/.env
+RUN npm install
 
-WORKDIR /app/packages/web
-
-# Install dependencies for packages
-RUN npm install --only=production --no-audit --no-fund --fetch-timeout=100000
-
-# build application
 RUN npm run build
 
-# Create new stage for optimizing the built image
-FROM nginx:1.20.2-alpine
+# Stage 2: Run
+FROM node:20.13.1-alpine
 
 WORKDIR /app
 
-# copy from built image
-COPY --from=build-stage /app/packages/web/build /usr/share/nginx/html
-COPY --from=build-stage /app/packages/web/nginx.conf /etc/nginx/nginx.conf
+# Copy only the necessary files from the build stage
+COPY --from=build /app/packages/web/build ./build
 
+# Install a simple web server to serve the built files
+RUN npm install -g serve
+
+# Expose the port on which the app runs
 EXPOSE 8080
+
+# Command to run the app
+CMD ["serve", "-s", "build"]
