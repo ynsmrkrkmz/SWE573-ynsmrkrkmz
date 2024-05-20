@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { LoadingButton } from '@mui/lab';
 import { Button, FormControl, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { useAuthContext } from 'contexts/AuthContext';
 import useFormResolver from 'hooks/useFormResolver';
 import useNotification from 'hooks/useNotification';
 import omit from 'lodash/omit';
@@ -17,6 +18,7 @@ import {
   PostTemplateField,
 } from 'routes/community/types/postTypes';
 import { useGetCommunityTemplates, useSubmitPost } from 'services/postService';
+import { UserCommunityRole } from 'types/userTypes';
 import { generatePostZodSchema } from 'utils/generatePostZodSchema';
 import { z } from 'zod';
 import Root from './CommunityNewPost.style';
@@ -27,6 +29,7 @@ const CommunityNewPost: FC = () => {
   const navigate = useNavigate();
   const { showSuccess } = useNotification();
   const { communityId } = useParams();
+  const { user } = useAuthContext();
   const [selectedPostTemplate, setSelectedPostTemplate] = useState(0);
 
   const { data } = useGetCommunityTemplates(communityId);
@@ -105,9 +108,11 @@ const CommunityNewPost: FC = () => {
             id: 'post.new',
           })}
         </Typography>
-        <Button variant="contained" onClick={handleNewTemplate} startIcon={<AddIcon />}>
-          <Typography>{intl.formatMessage({ id: 'post.newTemplate' })}</Typography>
-        </Button>
+        {user?.userCommunityRole === UserCommunityRole.OWNER ? (
+          <Button variant="contained" onClick={handleNewTemplate} startIcon={<AddIcon />}>
+            <Typography>{intl.formatMessage({ id: 'post.newTemplate' })}</Typography>
+          </Button>
+        ) : null}
       </Stack>
       <FormProvider {...useFormMethods}>
         <form onSubmit={handleSubmit(onFormSubmit)}>
