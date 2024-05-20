@@ -60,11 +60,12 @@ public class CommunityService {
         return communityRepository.findByIsPrivateAndDeleted(false, false);
     }
 
-    public boolean joinCommunity(User user, Long communityId, UserCommunityRole userCommunityRole) {
+    public boolean joinCommunity(User user, Long communityId, UserCommunityRole userCommunityRole,
+            boolean checkPrivate) {
 
         Community community = communityRepository.getReferenceById(communityId);
 
-        if (community.getIsPrivate().booleanValue())
+        if (checkPrivate && community.getIsPrivate().booleanValue())
             return false;
 
         CommunityUserId communityUserId = new CommunityUserId(communityId, user.getId());

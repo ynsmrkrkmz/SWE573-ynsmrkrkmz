@@ -99,7 +99,7 @@ public class InvitationService {
             return false;
 
         if (!communityService.joinCommunity(authUser, invitation.getCommunity().getId(),
-                invitation.getUserCommunityRole()))
+                invitation.getUserCommunityRole(), false))
             return false;
 
         invitation.setInvitationStatus(InvitationStatus.ACCEPTED);

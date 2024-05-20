@@ -125,7 +125,8 @@ public class CommunityController {
         public ResponseEntity<Object> joinCommunity(@AuthenticationPrincipal User authUser,
                         @RequestParam("communityId") Long communityId) {
 
-                boolean response = communityService.joinCommunity(authUser, communityId, UserCommunityRole.MEMBER);
+                boolean response = communityService.joinCommunity(authUser, communityId, UserCommunityRole.MEMBER,
+                                true);
 
                 if (!response)
                         return ResponseHandler.generateResponse("Could not join community", HttpStatus.BAD_REQUEST,
